@@ -28,7 +28,7 @@ def get_conversa():
 
 
     # Necessário fazer isso pq os chuncks de resposta do modelo ficam em Contents separados
-    if len(generative_chat.get_history()) > 0:
+    if generative_chat.get_history():
 
         agrupados:list[list[types.Content]] = []
 
@@ -59,6 +59,7 @@ def get_conversa():
                 resposta_text = ""
 
                 for content in grupo:
+
                     for part in content.parts:
 
                         if part.text:
@@ -71,11 +72,11 @@ def get_conversa():
                             )
                         if part.function_call:
                             st.write(
-                                f"Função chamada: {part.function_call.name} com argumentos {part.function_call.arguments}"
+                                f"Função chamada: {part.function_call.name} com argumentos {part.function_call.args}"
                             )
                         if part.function_response:
                             st.write(
-                                f"Resposta da função: {part.function_response.text}"
+                                f"Resposta da função: {part.function_response.response}"
                             )
 
     prompt = st.chat_input(
@@ -95,3 +96,42 @@ def get_conversa():
                     if chunk.text:
                         resposta += chunk.text
                         placeholder.write(resposta)
+
+                    if chunk.function_calls:
+                        for call in chunk.function_calls:
+                            st.write(
+                                f"Função chamada: {call.name} com argumentos {call.args}"
+                            )
+                    if chunk.executable_code:
+                        for code in chunk.executable_code:
+                                st.write(
+                                    f"Função chamada: {code.name}"
+                                )
+
+                    if chunk.code_execution_result:
+                        for result in chunk.code_execution_result:
+                            st.write(
+                                f"Resultado da execução do código: {result.response}"
+                            )
+
+                    #Não entendi essa parte direito
+                    if chunk.automatic_function_calling_history:
+                        for history in chunk.automatic_function_calling_history:
+
+                            for part in history.parts:
+
+                                if part.text:
+                                    st.write(part.text)
+
+                                if part.file_data:
+                                    st.write(
+                                        f"Arquivo recebido: {part.file_data.name} ({part.file_data.mime_type})"
+                                    )
+                                if part.function_call:
+                                    st.write(
+                                        f"Função chamada: {part.function_call.name} com argumentos {part.function_call.args}"
+                                    )
+                                if part.function_response:
+                                    st.write(
+                                        f"Resposta da função: {part.function_response.response}"
+                                    )

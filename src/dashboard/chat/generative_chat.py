@@ -1,5 +1,5 @@
 import streamlit as st
-from src.large_language_model.initialize_llm import GenerativeModelClient
+from src.large_language_model.client import GenerativeModelClient
 from google.genai import types, chats
 import logging
 

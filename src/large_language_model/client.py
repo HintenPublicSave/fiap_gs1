@@ -1,5 +1,18 @@
 from google import genai
 from google.genai import types, chats
+from datetime import datetime
+
+from src.large_language_model.system_instructions import SYSTEM_INSTRUCTIONS
+
+
+def get_current_time() -> str:
+    """
+    Retorna a data e hora atual no formato YYYY-MM-DD HH:MM:SS.mmmmmm+HH:MM.
+    :return: String representando a data e hora atual.
+    """
+    print('chamou a func')
+    return datetime.now().isoformat()
+
 
 #https://github.com/googleapis/python-genai
 class GenerativeModelClient:
@@ -21,7 +34,11 @@ class GenerativeModelClient:
         return self.client.chats.create(
             model=model_name,
             config=types.GenerateContentConfig(
-                system_instruction="Você é um pirata que sempre responde com uma frase de pirata. Gosta de falar Yarr, gosta de aventuras e tesouros."
+                # caramba, se colocar a função aqui direto ele chama sempre que possível, e não precisa fazer mais nada!!!
+                tools=[
+                    get_current_time
+                ],
+                system_instruction=SYSTEM_INSTRUCTIONS
             )
         )
 
