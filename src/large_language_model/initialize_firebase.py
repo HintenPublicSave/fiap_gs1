@@ -21,5 +21,5 @@ def initialize_firebase_app(credential_path: str) -> App:
 
 if __name__ == "__main__":
 
-    firebase_app = initialize_firebase_app(r"C:\Users\Lucas\PycharmProjects\fiap_gs1\fiap-gs1-343ac4a75e97.json")
+    firebase_app = initialize_firebase_app(r"/service_account.json")
     print(f"Firebase app initialized: {firebase_app.name}")

@@ -1,11 +1,11 @@
 import streamlit as st
 
+from src.dashboard.chat.conversa_chat import get_conversa
+
+
 def _principal():
 
-    st.title("Saudações!")
-
-    # todo arrumar logo principal
-    # st.image("assets/logo/logo-farmtech-solutions.png", width=600)
+    get_conversa()
 
 def get_principal_page() -> st.Page:
     """

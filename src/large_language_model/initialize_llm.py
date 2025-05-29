@@ -37,7 +37,7 @@ class InitializeAiPlatform:
         )
 
 
-def get_generative_model(model_name: str = 'gemini-2.0-flash-lite') -> GenerativeModel:
+def _get_generative_model(model_name: str = 'gemini-2.0-flash-lite') -> GenerativeModel:
     """
 
     Inicializa o modelo de linguagem generativa com o nome especificado.
@@ -49,9 +49,9 @@ def get_generative_model(model_name: str = 'gemini-2.0-flash-lite') -> Generativ
     return GenerativeModel(model_name=model_name)
 
 if __name__ == "__main__":
-    InitializeAiPlatform.initialize_from_service_account(r"C:\Users\Lucas\PycharmProjects\fiap_gs1\fiap-gs1-343ac4a75e97.json")
+    InitializeAiPlatform.initialize_from_service_account(r"/service_account.json")
 
-    modelo_generativo = get_generative_model()
+    modelo_generativo = _get_generative_model()
 
     chat = modelo_generativo.start_chat()
 

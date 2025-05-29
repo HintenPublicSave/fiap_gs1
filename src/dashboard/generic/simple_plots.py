@@ -19,6 +19,8 @@ class SimplePlotView:
         """
         st.title(f"Gráfico de {self.model.display_name_plural()}")
 
+
+
         filter_data = {}
 
         #todo melhorar os filtros no gráfico
