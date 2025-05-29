@@ -1,6 +1,6 @@
 import streamlit as st
-
-from src.dashboard.chat.generative_model import get_or_init_chat
+from google.genai import types
+from src.dashboard.chat.generative_chat import get_or_init_chat
 
 
 def get_conversa():
@@ -23,22 +23,63 @@ def get_conversa():
         border=True,
     )
 
-    reset_initial = False
+    messages.chat_message("assistant").write("Olá! Como posso ajudar você hoje?")
 
-    if generative_chat.history is not None and len(generative_chat.history) > 0:
 
-        for part in generative_chat.history:
-            if part.role == "user":
-                messages.chat_message("user").write(part.text)
+
+    # Necessário fazer isso pq os chuncks de resposta do modelo ficam em Contents separados
+    if len(generative_chat.get_history()) > 0:
+
+        agrupados:list[list[types.Content]] = []
+
+        last_content = None
+        current_agrupamento = []
+
+        for content in generative_chat.get_history():
+            if last_content is None or content.role != last_content.role:
+                if current_agrupamento:
+                    agrupados.append(current_agrupamento)
+
+                current_agrupamento = [content]
             else:
-                messages.chat_message("assistant").write(part.text)
-    else:
-        reset_initial = True
-        messages.chat_message("assistant").write("Olá! Como posso ajudar você hoje?")
+                current_agrupamento.append(content)
+            last_content = content
 
+        if current_agrupamento:
+            agrupados.append(current_agrupamento)
+
+
+        for grupo in agrupados:
+
+            role = "user" if grupo[0].role == "user" else "assistant"
+            with messages.chat_message(role):
+
+                placeholder = st.empty()
+
+                resposta_text = ""
+
+                for content in grupo:
+                    for part in content.parts:
+
+                        if part.text:
+                            resposta_text += part.text
+                            placeholder.write(resposta_text)
+
+                        if part.file_data:
+                            st.write(
+                                f"Arquivo recebido: {part.file_data.name} ({part.file_data.mime_type})"
+                            )
+                        if part.function_call:
+                            st.write(
+                                f"Função chamada: {part.function_call.name} com argumentos {part.function_call.arguments}"
+                            )
+                        if part.function_response:
+                            st.write(
+                                f"Resposta da função: {part.function_response.text}"
+                            )
 
     prompt = st.chat_input(
-        "Say something and/or attach an image",
+        "Digite sua mensagem aqui...",
         accept_file=True,
         file_type=["jpg", "jpeg", "png"],
     )
@@ -48,8 +89,9 @@ def get_conversa():
 
         with messages.chat_message("assistant"):
             with st.spinner("Pensando..."):
-                response = generative_chat.send_message(prompt.text.strip())
-                st.write(response.text)
-
-        if reset_initial:
-            st.rerun()
+                placeholder = st.empty()
+                resposta = ""
+                for chunk in generative_chat.send_message_stream(prompt.text.strip()):
+                    if chunk.text:
+                        resposta += chunk.text
+                        placeholder.write(resposta)

@@ -1,59 +1,35 @@
-from vertexai.generative_models import GenerativeModel
-from google.cloud import aiplatform
-from firebase_admin import App
-from google.oauth2 import service_account
+from google import genai
+from google.genai import types, chats
 
+#https://github.com/googleapis/python-genai
+class GenerativeModelClient:
 
-class InitializeAiPlatform:
+    def __init__(self, api_key='AIzaSyBBaXU3EV4tetwquRtuPmxH0oeVd6iGIqY'):
 
-    @classmethod
-    def initialize_from_firebase(cls, firebase_app:App) -> None:
-        """
-        Inicializa a plataforma Vertex AI com as configurações necessárias.
-        :param firebase_app: Instância do aplicativo Firebase já inicializada.
+        self.client = genai.Client(api_key=api_key)
+
+    def get_chat(self, model_name: str = 'gemini-2.0-flash-lite') -> chats.Chat:
         """
 
-        google_credentials = firebase_app.credential.get_credential()
+        Inicializa o modelo de linguagem generativa com o nome especificado.
 
-        aiplatform.init(
-            project=firebase_app.project_id,
-            location=firebase_app.options.get('location', 'us-central1'),
-            credentials=google_credentials
+        :param model_name: Nome do modelo de linguagem a ser inicializado. Padrão é 'gemini-2.0-flash-lite'.
+        :return: Instância do modelo de linguagem generativa.
+
+        """
+
+        return self.client.chats.create(
+            model=model_name,
+            config=types.GenerateContentConfig(
+                system_instruction="Você é um pirata que sempre responde com uma frase de pirata. Gosta de falar Yarr, gosta de aventuras e tesouros."
+            )
         )
 
-    @classmethod
-    def initialize_from_service_account(cls, service_account_path: str) -> None:
-        """
-        Inicializa a plataforma Vertex AI usando um arquivo de conta de serviço.
-        :param service_account_path: Caminho para o arquivo JSON da conta de serviço.
-        """
-
-        credentials = service_account.Credentials.from_service_account_file(service_account_path)
-
-        aiplatform.init(
-            project=credentials.project_id,
-            location='us-central1',
-            credentials=credentials
-        )
-
-
-def _get_generative_model(model_name: str = 'gemini-2.0-flash-lite') -> GenerativeModel:
-    """
-
-    Inicializa o modelo de linguagem generativa com o nome especificado.
-
-    :param model_name: Nome do modelo de linguagem a ser inicializado. Padrão é 'gemini-2.0-flash-lite'.
-    :return: Instância do modelo de linguagem generativa.
-
-    """
-    return GenerativeModel(model_name=model_name)
 
 if __name__ == "__main__":
-    InitializeAiPlatform.initialize_from_service_account(r"/service_account.json")
+    instance = GenerativeModelClient('AIzaSyBBaXU3EV4tetwquRtuPmxH0oeVd6iGIqY')
 
-    modelo_generativo = _get_generative_model()
-
-    chat = modelo_generativo.start_chat()
+    chat = instance.get_chat()
 
     response = chat.send_message("Olá, como você está?")
 
