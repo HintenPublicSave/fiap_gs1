@@ -1,9 +1,7 @@
 import pandas as pd
 import streamlit as st
 from sqlalchemy import BinaryExpression
-
 from src.dashboard.generic.model_form_fields import ModelFormField
-from datetime import datetime, timedelta
 
 from src.database.tipos_base.model import Model
 from src.plots.model_plot import ModelPlotter
@@ -23,6 +21,7 @@ class SimplePlotView:
 
         filter_data = {}
 
+        #todo melhorar os filtros no gráfico
         for plot_field in self.model.__generic_plot__.filters:
 
             form_field = ModelFormField(self.model, plot_field.field)
