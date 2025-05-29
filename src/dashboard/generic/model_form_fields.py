@@ -15,6 +15,7 @@ class ModelFormField:
                  model: type[Model],
                  field_name: str,
                  label: Optional[str] = None,
+                 nullable: bool or None = None
                  ):
         self.model = model
         self.field_name = field_name

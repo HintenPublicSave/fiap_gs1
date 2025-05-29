@@ -1,5 +1,7 @@
 from abc import abstractmethod
 
+import logging
+
 from src.database.tipos_base.database import Database
 from sqlalchemy import inspect
 from typing import Self
@@ -43,6 +45,7 @@ class _ModelCrudMixin:
         with Database.get_session() as session:
             session.add(self)
             session.commit()
+            logging.info(f"Registro salvo com sucesso: {self.id}")
 
         return self
 

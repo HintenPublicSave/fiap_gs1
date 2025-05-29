@@ -1,3 +1,4 @@
+import logging
 from src.dashboard.login import login_view, login_sqlite
 import streamlit as st
 from src.dashboard.navigator import navigation
@@ -16,11 +17,11 @@ def main():
 
     if not st.session_state.get('logged_in', False):
         #Escreve inúmeras vezes no loop
-        # logging.debug('acessando login')
+        logging.debug('acessando login')
         login_sqlite()
     else:
         #Escreve inúmeras vezes no loop
-        # logging.debug('acessando dashboard')
+        logging.debug('acessando dashboard')
         setup()
         navigation()
 

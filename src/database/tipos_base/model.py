@@ -13,6 +13,7 @@ from src.plots.plot_config import GenericPlot
 from sqlalchemy.sql.elements import BinaryExpression, UnaryExpression
 from sqlalchemy import String, Enum, Float, Boolean, Integer, DateTime
 from datetime import datetime
+from calendar import monthrange
 
 
 #https://docs.sqlalchemy.org/en/20/orm/quickstart.html
@@ -97,7 +98,7 @@ class Model(DeclarativeBase,
                 # Data e hora aleatórias entre 2000-01-01 e 2023-12-30
                 year = randint(2000, 2023)
                 month = randint(1, 12)
-                day = randint(1, 30)
+                day = randint(1, monthrange(year, month)[1])
 
                 data[field.name] = datetime(year, month, day, randint(0, 23), randint(0, 59), randint(0, 59))
 
@@ -133,7 +134,7 @@ class Model(DeclarativeBase,
         # faz um query com o sqlalchemy filtrando pelos filters do generic_plot e ordernando pelos order_by do generic_plot
 
         with Database.get_session() as session:
-            query = session.query(cls.__class__)
+            query = session.query(cls)
 
             if filters is not None:
                 query = query.filter(*filters)
@@ -157,7 +158,7 @@ class Model(DeclarativeBase,
                     campos_para_retornar.append(getattr(cls, field))
 
             # como vai retornar apenas o dataframe para gerar o gráfico, não precisa retornar todos os campos da tabela,
-            query = query.with_entities(campos_para_retornar)
+            query = query.with_entities(*campos_para_retornar)
 
             dataframe = pd.read_sql(query.statement, session.bind)
 

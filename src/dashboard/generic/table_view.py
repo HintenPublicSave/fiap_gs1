@@ -44,8 +44,15 @@ class TableView:
         return st.Page(
                 plot_view.view,
                 title=f"{self.model.display_name_plural()} - Gráfico",
-                url_path=f"{self.model.__name__.lower()}/grafico"
+                url_path=f"{self.model.__name__.lower()}-grafico"
             )
+
+    def redirect_to_plot_page(self):
+        """
+        Redireciona para a página de plotagem do modelo.
+        :return: None
+        """
+        st.switch_page(self.get_plot_page())
 
     def get_routes(self) -> list:
 
@@ -109,6 +116,11 @@ class TableView:
                 st.query_params['id'] = row_id
                 st.query_params['edit'] = 1
                 st.rerun()
+
+            if self.model.__generic_plot__ is not None:
+                if st.button("Gráfico"):
+                    self.redirect_to_plot_page()
+                    st.rerun()
 
     def edit_view(self, model_id: int|None = None):
         """
