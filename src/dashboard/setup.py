@@ -9,9 +9,8 @@ def setup():
 
     if not st.session_state.get('init_tables', False):
         logging.info("Criando tabelas...")
-        st.info("Criando tabelas...")
+        st.toast("Criando tabelas...")
         Database.create_all_tables()
         st.session_state['init_tables'] = True
         logging.info("Tabelas criadas com sucesso.")
-        st.success("Tabelas criadas com sucesso.")
-        # criar_sensores_padrao(plantio_id=1)
+        st.toast("Tabelas criadas com sucesso.")
