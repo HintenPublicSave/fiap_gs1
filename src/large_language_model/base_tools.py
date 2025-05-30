@@ -3,8 +3,6 @@ from typing import Callable, Any
 from google.genai import types
 from datetime import datetime
 
-
-
 class BaseTool(ABC):
     """
     Classe base para ferramentas que podem ser utilizadas em um modelo de linguagem generativa.
@@ -59,7 +57,7 @@ class BaseTool(ABC):
         pass
 
     @abstractmethod
-    def call_result_display(self, result: Any) -> str:
+    def call_result_display(self, result: Any) -> Any:
         """
         Exibe uma mensagem de chat informando o resultado da chamada da ferramenta.
         """

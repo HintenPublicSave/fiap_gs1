@@ -1,7 +1,8 @@
 from google import genai
 from google.genai import types, chats
-
+import os
 from src.large_language_model.base_tools import DateTimeTool, BaseTool
+from src.large_language_model.image_tool import ImageGenerationTool
 from src.large_language_model.system_instructions import SYSTEM_INSTRUCTIONS
 from enum import StrEnum
 
@@ -25,17 +26,25 @@ class AvailableGenerativeModels(StrEnum):
 
 
 #https://github.com/googleapis/python-genai
+#https://ai.google.dev/gemini-api/docs/text-generation?hl=pt-br
 class GenerativeModelClient:
 
 
-    tool_list:list[BaseTool] = [
-        DateTimeTool()
-    ]
 
-    def __init__(self, api_key='AIzaSyBBaXU3EV4tetwquRtuPmxH0oeVd6iGIqY', generative_model: AvailableGenerativeModels or None = None):
+    def __init__(self, api_key: str or None= None, generative_model: AvailableGenerativeModels or None = None):
+
+        api_key = api_key or os.getenv("GEMINI_API")
+
+        if not api_key:
+            raise ValueError("API key must be provided either as an argument or through the GEMINI_API environment variable.")
 
         self.client:genai.Client = genai.Client(api_key=api_key)
         self.generative_model:AvailableGenerativeModels = generative_model or AvailableGenerativeModels.GEMINI_2_0_FLASH
+
+        self.tool_list: list[BaseTool] = [
+            DateTimeTool(),
+            ImageGenerationTool()
+        ]
 
 
     def _get_function_declarations(self) -> list[types.FunctionDeclaration]:

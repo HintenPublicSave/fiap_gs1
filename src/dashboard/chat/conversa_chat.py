@@ -123,7 +123,7 @@ def get_conversa():
     if prompt is not None and prompt.text.strip() != "":
         messages.chat_message("user").write(prompt.text)
         first = True
-        tool_calls:list[tuple[BaseTool, list]] = [] #tool + args
+        tool_calls:list[tuple[BaseTool, dict]] = [] #tool + args
         tool_result:list[tuple[BaseTool, Any]] = []
         tool_result_display:list[str] = []
 
@@ -132,8 +132,10 @@ def get_conversa():
             if not first and tool_calls:
 
                 for call in tool_calls:
-                    tool, args = call
-                    result = tool.execute(*args)
+                    tool, kwargs = call
+
+                    # a api chama de args, mas na verdade são kwargs
+                    result = tool.execute(**kwargs)
                     tool_result.append((tool, result))
                     tool_result_display.append(tool.call_result_display(result))
 
@@ -172,7 +174,7 @@ def get_conversa():
                                 st.write(
                                     tool.call_chat_display(),
                                 )
-
+                                #a api chama de args, mas na verdade são kwargs
                                 tool_calls.append((tool, call.args))
 
                         if chunk.executable_code:
