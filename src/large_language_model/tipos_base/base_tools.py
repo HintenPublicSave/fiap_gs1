@@ -18,6 +18,13 @@ class BaseTool(ABC):
         """
         pass
 
+    def as_declaration(self) -> types.FunctionDeclaration:
+        """
+        Retorna a declaração da função como um objeto FunctionDeclaration do Google GenAI.
+        :return: types.FunctionDeclaration
+        """
+        return types.FunctionDeclaration.from_callable_with_api_option(callable=self.function_declaration)
+
     def __init__(self):
 
         if not self.function_declaration.__doc__ or not self.function_declaration.__doc__.strip():
@@ -62,25 +69,3 @@ class BaseTool(ABC):
         Exibe uma mensagem de chat informando o resultado da chamada da ferramenta.
         """
         pass
-
-def get_current_time() -> str:
-    """
-    Retorna a data e hora atual no formato YYYY-MM-DD HH:MM:SS.mmmmmm+HH:MM.
-    :return: String representando a data e hora atual.
-    """
-    return datetime.now().isoformat()
-
-class DateTimeTool(BaseTool):
-
-    @property
-    def function_declaration(self):
-        return get_current_time
-
-    def execute(self, *args, **kwargs) -> str:
-        return datetime.now().isoformat()
-
-    def call_chat_display(self) -> str:
-        return "Obtendo data e hora atual."
-
-    def call_result_display(self, result: str) -> str:
-        return "Obtida data e hora atual"

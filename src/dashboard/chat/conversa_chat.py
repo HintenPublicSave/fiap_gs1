@@ -5,7 +5,7 @@ from google.genai import types
 from google.genai.types import GenerateContentResponse
 
 from src.dashboard.chat.generative_chat import get_or_init_chat, get_or_init_chat_client
-from src.large_language_model.base_tools import BaseTool
+from src.large_language_model.tipos_base.base_tools import BaseTool
 from src.large_language_model.client import AvailableGenerativeModels
 
 

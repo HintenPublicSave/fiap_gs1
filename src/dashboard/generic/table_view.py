@@ -88,7 +88,7 @@ class TableView:
         col1, col2 = st.columns([5, 1])
 
         selected = {'selection': {'rows': [], 'columns': []}}
-        dataframe = self.model.as_dataframe_display()
+        dataframe = self.model.as_dataframe_display(select_fields=self.model.__table_view_fields__)
 
         with col1:
 

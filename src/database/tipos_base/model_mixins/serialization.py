@@ -3,7 +3,7 @@ AVISO: Este arquivo define apenas mixins para uso em herança múltipla.
 NÃO importe este arquivo diretamente como módulo principal.
 """
 import json
-from typing import Self
+from typing import Self, Optional
 from sqlalchemy import inspect,  String, Enum, Float, Boolean, Integer, DateTime
 import pandas as pd
 from typing import List
@@ -37,13 +37,26 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
         return json.dumps(self.to_dict(), indent=indent)
 
     @classmethod
-    def as_dataframe(cls) -> pd.DataFrame:
+    def as_dataframe(cls, select_fields: Optional[List[str]] = None) -> pd.DataFrame:
         """
         Retorna os dados da tabela como um DataFrame.
         :return: DataFrame - Dados da tabela.
         """
         with Database.get_session() as session:
             query = session.query(cls).order_by(cls.id)
+
+            campos_para_retornar = []
+
+            if select_fields is None:
+                campos_para_retornar = cls.fields()
+            else:
+                for field in select_fields:
+                    if not hasattr(cls, field):
+                        raise AttributeError(f"A classe {cls.__class__.__name__} não possui o atributo '{field}'.")
+                    campos_para_retornar.append(getattr(cls, field))
+
+            query = query.with_entities(*campos_para_retornar)
+
             return pd.read_sql(query.statement, session.bind)
 
     @classmethod
@@ -92,17 +105,21 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
         return instances
 
     @classmethod
-    def as_dataframe_display(cls) -> pd.DataFrame:
+    def as_dataframe_display(cls, select_fields: Optional[List[str]] = None) -> pd.DataFrame:
         """
         Retorna os dados da tabela como um DataFrame com os nomes de exibição.
         :return: DataFrame - Dados da tabela com os nomes de exibição.
         """
 
-        dataframe = cls.as_dataframe()
+        dataframe = cls.as_dataframe(select_fields)
 
         colum_names = {}
 
         for column in cls.fields():
+
+            if select_fields is not None and column.name not in select_fields:
+                continue
+
             colum_names[column.name] = cls.get_field_display_name(column.name)
 
             if isinstance(column.type, Enum):

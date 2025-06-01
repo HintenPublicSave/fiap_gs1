@@ -1,9 +1,9 @@
 from google import genai
 from google.genai import types, chats
 import os
-from src.large_language_model.base_tools import DateTimeTool, BaseTool
-from src.large_language_model.image_tool import ImageGenerationTool
+from src.large_language_model.tipos_base.base_tools import BaseTool
 from src.large_language_model.system_instructions import SYSTEM_INSTRUCTIONS
+from src.large_language_model.dynamic_tools import import_tools
 from enum import StrEnum
 
 class AvailableGenerativeModels(StrEnum):
@@ -41,10 +41,9 @@ class GenerativeModelClient:
         self.client:genai.Client = genai.Client(api_key=api_key)
         self.generative_model:AvailableGenerativeModels = generative_model or AvailableGenerativeModels.GEMINI_2_0_FLASH
 
-        self.tool_list: list[BaseTool] = [
-            DateTimeTool(),
-            ImageGenerationTool()
-        ]
+        tools = import_tools(sort=True)
+
+        self.tool_list: list[BaseTool] = [tool() for tool in tools.values()]
 
 
     def _get_function_declarations(self) -> list[types.FunctionDeclaration]:
@@ -53,7 +52,7 @@ class GenerativeModelClient:
         :return: Lista de FunctionDeclaration.
         """
 
-        return [types.FunctionDeclaration.from_callable_with_api_option(callable=tool.function_declaration) for tool in self.tool_list]
+        return [tool.as_declaration() for tool in self.tool_list]
 
     def get_tool(self, tool_name: str) -> BaseTool:
         """
@@ -96,8 +95,6 @@ class GenerativeModelClient:
 
 if __name__ == "__main__":
     instance = GenerativeModelClient()
-
-    instance._get_function_declarations()
 
     # chat = instance.get_chat()
     #
