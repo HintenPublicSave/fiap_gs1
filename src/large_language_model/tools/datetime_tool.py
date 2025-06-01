@@ -17,7 +17,7 @@ class DateTimeTool(BaseTool):
         return get_current_time
 
     def execute(self, *args, **kwargs) -> str:
-        return datetime.now().isoformat()
+        return get_current_time()
 
     def call_chat_display(self) -> str:
         return "Obtendo data e hora atual."

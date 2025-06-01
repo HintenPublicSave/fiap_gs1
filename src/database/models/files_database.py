@@ -82,5 +82,11 @@ class Arquivo(Model):
         },
     )
 
+    posts = relationship(
+        'PostRedeSocial',
+        back_populates='anexo',
+        cascade="all, delete-orphan"
+    )
+
     def __str__(self):
         return f"{self.id} - {self.nome}"
