@@ -58,7 +58,7 @@ class ImageGenerationTool(BaseTool):
         """
         Generate an image for a given prompt.
 
-        The prompt must be written in English and should be as detailed as possible to achieve the best results.
+        :param prompt: The prompt must be written in English and should be as detailed as possible to achieve the best results.
         It must start with "Generate an image".
         """
 

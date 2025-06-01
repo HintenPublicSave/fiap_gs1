@@ -2,6 +2,7 @@ from datetime import datetime
 from src.large_language_model.tipos_base.base_tools import BaseTool
 from src.database.models.posts import PostRedeSocial
 from src.database.tipos_base.database import Database
+from google.genai import types
 
 class SavePostTool(BaseTool):
 
@@ -39,13 +40,23 @@ class SavePostTool(BaseTool):
             return {
                 'error': str(e)
             }
+    def get_result_as_part(self, result: dict) -> types.Part:
+        return types.Part.from_function_response(
+            name=self.function_name,
+            response=result
+        )
 
     def call_chat_display(self) -> str:
         return "Salvando post na base de dados..."
 
-    def call_result_display(self, result: dict) -> str:
+    def call_result_display(self, result) -> str:
+
+
+        print(result, type(result))
+
         if 'error' in result:
             return 'Erro ao salvar post: ' + result['error']
+
 
         post_id = result.get('output', {}).get('post_id')
 
