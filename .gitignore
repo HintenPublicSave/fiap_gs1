@@ -4,3 +4,4 @@ src/wokwi/.vscode
 __pycache__/
 .idea
 .vscode
+*.log
