@@ -1,6 +1,6 @@
 // Essa aplicação tem o objetivo enviar alertas de enchentes através da utilização de 2 sensores
 // Sensores: LDR (Nivel simulado), 
-// Quando 2 ou mais sensores apontarem resultados negativos o relé do sistema de irrigação será acionado e o led irá acender
+// Caso qualquer um dos sensores aponte problema e a API informe que irá chover o alerta será acionado
 // Cado API Meteorológica. representada pelo Botão Vermelho, informe que que haverá chuva o sistema de irrigação será interrompido
 
 // CONDIÇÃO NEGATIVA DE CADA SENSOR:
@@ -9,7 +9,7 @@
 
 // === DEFINIÇÃO DE PINOS ===
 #define LDR_PIN 14        // Pino analógico para simular nivel de agua em bueiros via LDR
-#define RELAY_PIN 34      // Relé que aciona a bomba
+#define RELAY_PIN 16      // Relé que aciona a bomba
 #define LED_PIN 2         // LED indicativo da bomba
 #define BUTTON_API 18     // Botão de API Meteorológica (vermelho)
 #define ECHO_PIN 25       // ECHO (Medição do comprimento de um pulso alto para obter a distância) HC-SR04 nível de água
@@ -56,7 +56,7 @@ void loop() {
   // === LEITURA E CONTROLE DE ESTADO DOS BOTÕES ===
   bool leituraAPI = digitalRead(BUTTON_API);
   bool LedValue = digitalRead(LED_PIN);
-  bool BuzValue = digitalRead(buzzer);
+  //bool BuzValue = digitalRead(buzzer);
 
   // Verifica mudança de estado do botão da API
   if (leituraAPI == LOW && ultimoEstadoAPI == HIGH) {
@@ -76,12 +76,12 @@ void loop() {
   bool resultadoAPI = !estadoAPI;
 
   // Nivel de água no bueiro ideal (simulado pelo LDR)
-  bool nivelIdeal = (ldrValue > 3000);
+  bool nivelBueiro = (ldrValue > 3000);
 
   // Verifica se a aguá está no nível aceitável (> 3m)
   float distance = readDistanceCM();
 
-  bool isNearby = distance > 300;
+  bool nivelLeito = distance > 300;
   //digitalWrite(LED_BUILTIN, isNearby);
 
   // Mostrar valores no Serial Monitor
@@ -97,8 +97,8 @@ void loop() {
   if (estadoAPI) condicoesAPI++;
   // Conta quantas variáveis estão com valor falso (condição crítica)
   int condicoesCriticas = 0;
-  if (nivelIdeal) condicoesCriticas++;
-  if (isNearby) condicoesCriticas++;
+  if (nivelBueiro) condicoesCriticas++;
+  if (nivelLeito) condicoesCriticas++;
 
   // Caso pelo menos 1 dos sensores aponte nível elevado de água e a API acuse previsão de chuva o alerta será emitido
   if (condicoesCriticas >= 1 && condicoesAPI == 1) {
