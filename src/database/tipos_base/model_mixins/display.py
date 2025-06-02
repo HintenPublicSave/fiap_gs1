@@ -108,6 +108,7 @@ class _ModelDisplayMixin:
     __menu_group__: str or None = None
     __table_view_fields__: list[str] = None
     __table_view_filters__: list[SimpleTableFilter] or None = None
+    __table_view_itens_per_page__: int = 50
 
     # def __str__(self):
     #     """

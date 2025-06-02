@@ -136,6 +136,8 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
                          order_by: Optional[List[UnaryExpression]] = None,
                          select_fields: Optional[List[str]] = None,
                          as_display: bool = False,
+                         offset: Optional[int] = None,
+                         limit: Optional[int] = None
                          ) -> pd.DataFrame:
         """
         Obtém os dados da instância formatados para plotagem.
@@ -169,6 +171,12 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
 
             # como vai retornar apenas o dataframe para gerar o gráfico, não precisa retornar todos os campos da tabela,
             query = query.with_entities(*campos_para_retornar)
+
+            if offset is not None:
+                query = query.offset(offset)
+
+            if limit is not None:
+                query = query.limit(limit)
 
             dataframe = pd.read_sql(query.statement, session.bind)
 

@@ -3,7 +3,7 @@ from abc import abstractmethod
 import logging
 
 from src.database.tipos_base.database import Database
-from sqlalchemy import inspect
+from sqlalchemy import inspect, BinaryExpression
 from typing import Self
 
 class _ModelCrudMixin:
@@ -87,3 +87,17 @@ class _ModelCrudMixin:
             session.commit()
 
         return self
+
+    @classmethod
+    def count(cls, filters:list[BinaryExpression] or None = None) -> int:
+        """
+        Conta o número de registros na tabela.
+        :param filters: list[BinaryExpression] or None - Filtros a serem aplicados na contagem.
+        :return: int - Número de registros.
+        """
+        with Database.get_session() as session:
+
+            if filters:
+                return session.query(cls).filter(*filters).count()
+
+            return session.query(cls).count()
