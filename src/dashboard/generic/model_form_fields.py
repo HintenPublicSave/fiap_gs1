@@ -5,7 +5,7 @@ from src.database.tipos_base.model import Model
 from typing import Any
 from enum import Enum
 import streamlit as st
-from sqlalchemy import String, Enum, Float, Boolean, Integer, DateTime, LargeBinary
+from sqlalchemy import String, Text, Enum, Float, Boolean, Integer, DateTime, LargeBinary
 from datetime import datetime
 import logging
 from typing import Optional
@@ -116,15 +116,6 @@ class ModelFormField:
                 help=self.field.comment,
             )
 
-        elif isinstance(self.field.type, String):
-            # Exibir um campo de texto para editar o valor
-            new_value = st.text_input(
-                value=initial_value,
-                label=self.label,
-                help=self.field.comment,
-                max_chars=self.field.type.length,
-            )
-
         elif isinstance(self.field.type, DateTime):
             # Exibir um campo de data/hora para editar o valor
             date = st.date_input(
@@ -146,6 +137,24 @@ class ModelFormField:
 
             else:
                 new_value = None
+
+        elif isinstance(self.field.type, Text):
+            # Exibir um campo de texto para editar o valor
+            new_value = st.text_area(
+                value=initial_value,
+                label=self.label,
+                help=self.field.comment,
+                max_chars=self.field.type.length,
+            )
+
+        elif isinstance(self.field.type, String):
+            # Exibir um campo de texto para editar o valor
+            new_value = st.text_input(
+                value=initial_value,
+                label=self.label,
+                help=self.field.comment,
+                max_chars=self.field.type.length,
+            )
 
         elif isinstance(self.field.type, LargeBinary):
 
