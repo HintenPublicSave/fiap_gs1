@@ -1,9 +1,10 @@
 from enum import StrEnum
-from typing import List
-from sqlalchemy import Sequence, String, Text, ForeignKey, Float, DateTime, Enum, LargeBinary
+from sqlalchemy import Sequence, String, DateTime, Enum, LargeBinary
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database.tipos_base.model import Model
 from datetime import datetime
+
+from src.database.tipos_base.model_mixins.display import SimpleTableFilter
 
 
 class TipoArquivoEnum(StrEnum):
@@ -34,6 +35,19 @@ class Arquivo(Model):
         'nome',
         'tipo',
         'ultima_atualizacao'
+    ]
+
+    __table_view_filters__ = [
+        SimpleTableFilter(
+            field='ultima_atualizacao',
+            operator='>=',
+            label="Data Inicial"
+        ),
+        SimpleTableFilter(
+            field='ultima_atualizacao',
+            operator='<=',
+            label="Data Final"
+        )
     ]
 
     id: Mapped[int] = mapped_column(

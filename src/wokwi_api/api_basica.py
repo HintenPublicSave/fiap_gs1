@@ -11,7 +11,7 @@ class LeituraRequest(BaseModel):
 
 @app.post("/")
 def receber_leitura(item: LeituraRequest):
-    # Aqui, "item" já é um objeto Item, convertido do JSON enviado
+    # Aqui, "item" já é um objeto LeituraRequest, convertido do JSON enviado
     print('leitura recebida:')
     print(item)
 

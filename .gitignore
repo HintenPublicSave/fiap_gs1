@@ -3,3 +3,4 @@ src/wokwi/.vscode
 *.pyc
 __pycache__/
 .idea
+.vscode

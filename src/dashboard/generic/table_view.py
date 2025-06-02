@@ -1,5 +1,8 @@
 import streamlit as st
+from sqlalchemy import BinaryExpression
+
 from src.dashboard.generic.edit_view import EditView
+from src.dashboard.generic.model_query_filters import ModelQueryFilters
 from src.dashboard.generic.simple_plots import SimplePlotView
 from src.database.tipos_base.model import Model
 
@@ -85,10 +88,32 @@ class TableView:
 
         st.title(self.model.display_name_plural())
 
-        col1, col2 = st.columns([5, 1])
+        if self.model.__table_view_filters__ is not None:
+            col0, col1, col2 = st.columns([1, 5, 1])
+        else:
+            col0 = None
+            col1, col2 = st.columns([5, 1])
+
+        model_filters = ModelQueryFilters(self.model)
+
+        if col0:
+            with col0:
+                model_filters.render()
+
 
         selected = {'selection': {'rows': [], 'columns': []}}
-        dataframe = self.model.as_dataframe_display(select_fields=self.model.__table_view_fields__)
+
+        filters_valid:list[BinaryExpression] = []
+
+        for f in model_filters.get_filters():
+            if f.value is not None or f.optional == False:
+                filters_valid.append(f.get_sqlalchemy_filter(self.model))
+
+        dataframe = self.model.filter_dataframe(
+            select_fields=self.model.__table_view_fields__,
+            filters=None if not filters_valid else filters_valid,
+            order_by=[self.model.id.desc()] if self.model.id is not None else None,
+        )
 
         with col1:
 

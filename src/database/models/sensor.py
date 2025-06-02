@@ -1,33 +1,23 @@
 from enum import StrEnum
-from typing import List
-from sqlalchemy import Sequence, String, Text, ForeignKey, Float, DateTime, Enum
+from typing import List, Self
+from sqlalchemy import Sequence, String, ForeignKey, Float, DateTime, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database.tipos_base.database import Database
 from src.database.tipos_base.model import Model
 from datetime import datetime, date, time, timedelta
+import numpy as np
 
+from src.database.tipos_base.model_mixins.display import SimpleTableFilter
 from src.plots.plot_config import GenericPlot, PlotField, TipoGrafico, OrderBy
 
 
 class TipoSensorEnum(StrEnum):
-    FOSFORO = "P"
-    POTASSIO = "K"
-    PH = "pH"
-    UMIDADE = "H"
-    RELE = "Rele"
+    PROFUNDIDADE = "P"
 
     def __str__(self):
 
         if self.value == "P":
-            return "Fósforo"
-        if self.value == "K":
-            return "Potássio"
-        if self.value == "pH":
-            return "PH"
-        if self.value == "H":
-            return "Umidade"
-        if self.value == "Rele":
-            return "Estado do Relé"
+            return "Profundidade"
 
         return super().name
 
@@ -39,6 +29,14 @@ class TipoSensor(Model):
     __menu_group__ = "Sensores"
     __menu_order__ = 1
     __database_import_order__ = 10
+
+    __table_view_filters__ = [
+        SimpleTableFilter(
+            field='tipo',
+            label='Tipo',
+            operator='==',
+        )
+    ]
 
     @classmethod
     def display_name(cls) -> str:
@@ -87,6 +85,15 @@ class Sensor(Model):
     __menu_group__ = "Sensores"
     __menu_order__ = 2
     __database_import_order__ = 11
+
+    __table_view_filters__ = [
+        SimpleTableFilter(
+            field='tipo_sensor_id',
+            label='Tipo de Sensor',
+            operator='=='
+        )
+
+    ]
 
     @classmethod
     def display_name_plural(cls) -> str:
@@ -185,14 +192,50 @@ class LeituraSensor(Model):
     __menu_group__ = "Sensores"
     __menu_order__ = 3
     __database_import_order__ = 12
+
+    __table_view_filters__ = [
+        SimpleTableFilter(
+            field='sensor_id',
+            label='Sensor',
+            operator='==',
+        ),
+        SimpleTableFilter(
+            field='data_leitura',
+            label='Data da Leitura Inicial',
+            operator='>=',
+            optional=True
+        ),
+        SimpleTableFilter(
+            field='data_leitura',
+            label='Data da Leitura Final',
+            operator='<=',
+            optional=True
+        )
+    ]
+
     __generic_plot__ = GenericPlot(
         eixo_x=[PlotField(field='data_leitura', display_name='Data da Leitura')],
         eixo_y=[PlotField(field='valor', display_name='Valor')],
         tipo=TipoGrafico.LINHA,
         title="Gráfico de Leituras do Sensor",
         filters=[
-            PlotField(field='sensor_id', display_name='Sensor'),
-            PlotField(field='data_leitura', display_name='Data da Leitura'),
+            SimpleTableFilter(field='sensor_id',
+                              operator='==',
+                              label='Sensor',
+                              optional=False
+                              ),
+            SimpleTableFilter(
+                field='data_leitura',
+                name='data_leitura_inicial',
+                operator='>=',
+                label='Data da Leitura Inicial',
+            ),
+            SimpleTableFilter(
+                field='data_leitura',
+                name='data_leitura_final',
+                operator='<=',
+                label='Data da Leitura Final',
+            ),
         ],
         order_by=[OrderBy(field='data_leitura', asc=True)]
     )
@@ -251,3 +294,30 @@ class LeituraSensor(Model):
             ).order_by(LeituraSensor.data_leitura).all()
 
             return leituras
+
+
+    @classmethod
+    def random_range(cls, nullable: bool = True, quantity: int = 100, **kwargs) -> List[Self]:
+        """
+        Cria uma lista de instâncias da classe com valores aleatórios para os campos definidos.
+        :param nullable: bool - Se True, alguns campos podem ser None.
+        :param quantity: int - Quantidade de instâncias a serem criadas.
+        :return: Lista de instâncias da classe com valores aleatórios.
+        """
+
+        data_inicial = kwargs.get('values_by_name', {}).get('data_leitura_inicial', (datetime.now() - timedelta(days=7)).isoformat())
+
+        data_inicial = datetime.fromisoformat(data_inicial) if isinstance(data_inicial, str) else data_inicial
+
+        response = []
+
+        for i in range(quantity):
+            data_leitura = data_inicial + timedelta(days=i/7)
+            leitura = cls(
+                sensor_id=1,
+                data_leitura=data_leitura,
+                valor=np.random.choice(np.arange(0, 100, 0.01))
+            )
+            response.append(leitura)
+
+        return response

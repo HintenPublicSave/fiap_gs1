@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database.tipos_base.model import Model
 from datetime import datetime
 from src.database.models.files_database import Arquivo
+from src.database.tipos_base.model_mixins.display import SimpleTableFilter
 
 
 class PostRedeSocial(Model):
@@ -14,6 +15,19 @@ class PostRedeSocial(Model):
     __menu_group__ = "Posts"
     __menu_order__ = 1
     __database_import_order__ = 10
+
+    __table_view_filters__ = [
+        SimpleTableFilter(
+            field='ultima_atualizacao',
+            operator='>=',
+            label="Data Inicial"
+        ),
+        SimpleTableFilter(
+            field='ultima_atualizacao',
+            operator='<=',
+            label="Data Final"
+        )
+    ]
 
     @classmethod
     def display_name(cls) -> str:

@@ -25,6 +25,7 @@ class ModelFormField:
         self.field = model.get_field(field_name)
         self.label = label or model.get_field_display_name(field_name)
         self.current_value = None
+        self.nullable = nullable or self.field.nullable
 
     def render(self, initial_value=None, show_validation=False) -> Any:
 
@@ -175,7 +176,7 @@ class ModelFormField:
             print(self.field.type, type(self.field.type))
             raise NotImplementedError(f"Tipo de campo não suportado: {self.field.type}")
 
-        if show_validation and self.validate(new_value):
+        if show_validation and self.validate(new_value, required=not self.nullable):
             st.warning(f"Valor inválido para o campo {self.label}: {self.validate(new_value)}")
 
         self.current_value = new_value
@@ -184,7 +185,12 @@ class ModelFormField:
 
     def validate(self, value:Any, required:bool=True) -> str or None:
         if value is None and not required:
+            print(f"Campo {self.label} não é obrigatório e o valor é None.")
             return None
+
+        if value is None and required:
+            print(f"Campo {self.label} é obrigatório e o valor é None.")
+            return f"O campo {self.label} é obrigatório."
 
         return self.model.validate_field(self.field.name, value)
 
