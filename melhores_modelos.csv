@@ -1,0 +1,6 @@
+Modelo,Accuracy,Precision,Recall,F1 Score,ROC AUC
+GradBoost 200,1.0,1.0,1.0,1.0,1.0
+GradBoost 50,1.0,1.0,1.0,1.0,1.0
+GradBoost 100,1.0,1.0,1.0,1.0,1.0
+AdaBoost 50,1.0,1.0,1.0,1.0,1.0
+DecTree d10,1.0,1.0,1.0,1.0,1.0

@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 from sqlalchemy import BinaryExpression
-from src.dashboard.generic.model_form_fields import ModelFormField
+from src.dashboard.generic.model_query_filters import ModelQueryFilters
 
 from src.database.tipos_base.model import Model
 from src.plots.model_plot import ModelPlotter
@@ -19,47 +19,49 @@ class SimplePlotView:
         """
         st.title(f"Gráfico de {self.model.display_name_plural()}")
 
+        plot_filters = ModelQueryFilters(self.model,
+                                         self.model.__generic_plot__.filters,
+                                         show_validation=st.query_params.get('show_validation', False) == '1',
+                                         show_botao_filtrar=False
+                                         )
 
-
-        filter_data = {}
-
-        #todo melhorar os filtros no gráfico
-        for plot_field in self.model.__generic_plot__.filters:
-
-            form_field = ModelFormField(self.model, plot_field.field)
-
-            new_value = form_field.render()
-
-            filter_data[plot_field.field] = new_value
+        plot_filters.render()
 
         col1, col2 = st.columns(2)
 
-        simulacao = None
-        real = None
+        simulacao = st.query_params.get('simulacao', False)
+        real = st.query_params.get('real', False)
 
         with col1:
-            simulacao = st.button("Gerar Simulação")
+            if st.button("Gerar Simulação"):
+                plot_filters.apply_filters()
+                st.query_params['simulacao'] = '1'
+                st.query_params.pop('real', None)
+                st.rerun()
 
 
         with col2:
-            real = st.button("Gerar Gráfico")
+            if st.button("Gerar Gráfico Real"):
+                plot_filters.apply_filters()
+                st.query_params['real'] = '1'
+                st.query_params.pop('simulacao', None)
+                st.rerun()
 
         if simulacao or real:
 
-            for plot_field in self.model.__generic_plot__.filters:
-                form_field = ModelFormField(self.model, plot_field.field)
-                value = filter_data.get(plot_field.field)
-                if not form_field.is_valid(value, required=not plot_field.optional):
-                    st.error(f"Erro ao validar o campo {plot_field.field}: {form_field.validate(value, required=not plot_field.optional)}")
-                    return
+            if not plot_filters.filters_valid():
+                st.error("Por favor, preencha todos os filtros obrigatórios.")
+                st.query_params['show_validation'] = '1'
+                return
+            else:
+                st.query_params.pop('show_validation', None)
 
         if simulacao:
-            data = []
-
-            for i in range(100):
-                data.append(self.model.random(nullable=False))
+            data = self.model.random_range(nullable=False, quantity=100, **{'values': plot_filters.get_filter_values(), 'values_by_name': plot_filters.get_filter_values_by_name()})
 
             dataframe = pd.DataFrame(map(lambda x: x.to_dict(), data))
+
+            print(dataframe)
 
             model_plotter = ModelPlotter(self.model)
 
@@ -69,16 +71,7 @@ class SimplePlotView:
 
         elif real:
 
-            filters:list[BinaryExpression] = []
-
-            for key, value in filter_data.items():
-                if value is not None:
-                    filters.append(
-                        getattr(self.model, self.model.get_field(key).name) == value
-                    )
-
-            print(filters)
-
+            filters:list[BinaryExpression] = plot_filters.get_sqlalchemy_filters()
 
             model_plotter = ModelPlotter(self.model)
             dataframe = model_plotter.get_data_for_plot(filters=filters)

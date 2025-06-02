@@ -14,6 +14,7 @@ def main():
     :return:
     """
     configurar_logger("dashboard.log")
+    st.set_page_config(layout="wide") # deixa a página mais larga
 
     if not st.session_state.get('logged_in', False):
         #Escreve inúmeras vezes no loop

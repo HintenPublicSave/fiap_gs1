@@ -1,2 +1,9 @@
 [client]
 showSidebarNavigation = false
+
+[theme]
+primaryColor = "#FF4B4B"              # Vermelho alerta
+backgroundColor = "#18191A"           # Cinza escuro
+secondaryBackgroundColor = "#242526"  # Cinza intermediário
+textColor = "#F5F6FA"                 # Quase branco para contraste
+font = "sans serif"

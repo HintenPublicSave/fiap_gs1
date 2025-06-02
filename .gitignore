@@ -1,0 +1,6 @@
+src/wokwi/.pio
+src/wokwi/.vscode
+*.pyc
+__pycache__/
+.idea
+.vscode
