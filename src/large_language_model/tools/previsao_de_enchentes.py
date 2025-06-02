@@ -1,38 +1,24 @@
-from datetime import datetime
 import os
 import io
 import contextlib
-from src.API_met import get_5day_forecast, analisar_chuva_5day
-from dotenv import load_dotenv
+from src.API_met.api import get_5day_forecast, analisar_chuva_5day
 from src.large_language_model.tipos_base.base_tools import BaseTool
-
 
 class EnchenteTool(BaseTool):
 
     @property
     def function_declaration(self):
-         return {
-            "name": "prever_risco_enchente_proximos_dias",
-            "description": "Prevê o risco de chuva intensa que pode levar a enchentes para uma cidade nos próximos 5 dias.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "cidade": {
-                        "type": "string",
-                        "description": "O nome da cidade para a qual obter a previsão. Ex: 'São Paulo'"
-                    }
-                },
-                "required": ["cidade"]
-            }
-        }
+
+        return self.prever_enchente_proximos_dias
+
     def prever_enchente_proximos_dias(self, cidade: str):
         """
-        Preview if there will be a flooding in the next 5 days
+        Prevê o risco de chuva intensa que pode levar a enchentes para uma cidade nos próximos 5 dias.
+        Parâmetro:
+            cidade (str): O nome da cidade para a qual obter a previsão. Ex: 'São Paulo'
         """
-
         print("Chamou função previsão de enchente")
 
-        load_dotenv()
         api_key = os.getenv('API_MET')
 
         previsao_data = get_5day_forecast(cidade, api_key)
