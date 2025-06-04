@@ -1,4 +1,6 @@
 import logging
+import os
+
 from src.logger.color_text import makeCyan, makeBlue, makeYellow, makeRed, makePink
 from src.settings import DEBUG
 
@@ -32,6 +34,10 @@ def configurar_logger(file_name: str = 'app.log', level: int = None):
     :param level: nível de log. Se não for fornecido, o nível padrão é DEBUG se DEBUG for True, caso contrário, INFO.
     :return:
     """
+
+    if not os.environ.get("LOGGING_ENABLED", "true").lower() == "true":
+        return
+
 
     logger = logging.getLogger()
 

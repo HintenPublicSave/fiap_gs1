@@ -14,7 +14,7 @@ def main():
 
     print(ddl)
 
-    with open("export.ddl", "w") as f:
+    with open("../assets/export.ddl", "w") as f:
         f.write(ddl)
 
     mer = Database.generate_mer()

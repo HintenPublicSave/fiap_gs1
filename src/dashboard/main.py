@@ -1,4 +1,6 @@
 import logging
+import os
+
 from src.dashboard.login import login_view, login_sqlite
 import streamlit as st
 from src.dashboard.navigator import navigation
@@ -16,12 +18,16 @@ def main():
     configurar_logger("dashboard.log")
     st.set_page_config(layout="wide") # deixa a página mais larga
 
+    sql_lite:bool = os.environ.get("SQL_LITE", "false").lower() == "true"
+
     if not st.session_state.get('logged_in', False):
-        #Escreve inúmeras vezes no loop
         logging.debug('acessando login')
-        login_sqlite()
+
+        if sql_lite:
+            login_sqlite()
+        else:
+            login_view()
     else:
-        #Escreve inúmeras vezes no loop
         logging.debug('acessando dashboard')
         setup()
         navigation()
