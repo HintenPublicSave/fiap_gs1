@@ -292,7 +292,7 @@ O gente de IA também é capaz de coletar dados meteorológicos e prever condiç
 </p>
 
 > **ATENÇÃO**
-> A previsão de enchentes é baseada no modelo de IA treinado pelo grupo, que será discutido abaixo. O Agente de IA chama uma tool que tem acesso ao modelo preditivo de enchentes, e depois passa a resposta para o usuário.
+> A previsão de enchentes é baseada nas leituras dos sensores e no modelo de IA treinado pelo grupo que será discutido abaixo. O Agente de IA chama uma tool que tem acesso ao modelo preditivo de enchentes, e depois passa a resposta para o usuário.
 
 ## Possíveis erros ao interagir com o agente
 
@@ -310,43 +310,43 @@ O limite de requisições da API é de 60 requisições por minuto e 1500 requis
 As imagens criadas pelo agente de IA podem ser visualizadas e alteradas diretamente no dashboard. O usuário pode acessar a página de Arquvios, onde poderá ver todas as imagens criadas, editar ou excluir aquelas que não forem mais necessárias.
 
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/arquivos.JPG" alt="arquivos" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/arquivos.JPG" alt="arquivos" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/pagina_visualizacao_arquivos.JPG" alt="pagina_visualizacao_arquivos" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/pagina_visualizacao_arquivos.JPG" alt="pagina_visualizacao_arquivos" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/criar_editar_arquivos.JPG" alt="criar_editar_arquivos" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/criar_editar_arquivos.JPG" alt="criar_editar_arquivos" border="0" width=70% height=70%>
 </p>
 
 Para salvar um novo arquivo, o usuário pode clicar no botão "Novo", preencher o formulário e clicar em "Salvar". O arquivo será adicionado à lista de arquivos e poderá ser utilizado posteriormente na criação de posts.
 
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/criar_arquivo.JPG" alt="criar_arquivo" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/criar_arquivo.JPG" alt="criar_arquivo" border="0" width=70% height=70%>
 </p>
 
 Para editar um arquivo existente, o usuário pode selecionar um arquivo da lista e clicar no botão "Editar", fazer as alterações necessárias e clicar em "Salvar". O arquivo será atualizado na lista de arquivos.
 
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/editar_arquivo_1.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/editar_arquivo_1.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/editar_arquivo_2.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/editar_arquivo_2.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/editar_arquivo_3.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/editar_arquivo_3.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
 </p>
 
 Para excluir um arquivo, o usuário pode selecionar um arquivo da lista e clicar no botão "Editar" e posteriormente "Excluir". O arquivo será removido da lista de arquivos.
 
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/excluir_1.JPG" alt="excluir_1" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/excluir_1.JPG" alt="excluir_1" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/excluir_2.JPG" alt="excluir_2" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/excluir_2.JPG" alt="excluir_2" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/excluir_3.JPG" alt="excluir_3" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/excluir_3.JPG" alt="excluir_3" border="0" width=70% height=70%>
 </p>
 
 ## Visualizando e alterando posts criados
@@ -355,13 +355,49 @@ A lógica de visualização e alteração de posts criados é semelhante à de a
 Posto isto, seguem abaixo algumas imagens que ilustram a página de posts, bem como a visualização e edição de posts criados.
 
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/posts_1.JPG" alt="posts_1" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/posts_1.JPG" alt="posts_1" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/posts_2.JPG" alt="posts_2" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/posts_2.JPG" alt="posts_2" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/arquivos/posts_3.JPG" alt="posts_3" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/crud/posts_3.JPG" alt="posts_3" border="0" width=70% height=70%>
+</p>
+
+## Previsão do tempo
+
+O usuario também pode acessar a página de Previsão do Tempo, onde poderá visualizar as condições climáticas atuais e as previsões para os próximos dias.
+
+<p align="center">
+  <img src="assets/readme/dashboard/view_previsao_do_tempo.JPG" alt="view_previsao_do_tempo" border="0" width=70% height=70%>
+</p>
+
+## Modelo de IA para a previsão de enchentes
+
+O tema escolhido pelo grupo para o modelo de IA foi a previsão de enchentes, uma vez que este é um dos desastres naturais mais frequentes no Brasil e que pode causar grandes danos à população.
+
+O agente de IA tem acesso direto ao modelo de IA treinado pelo grupo, que foi desenvolvido utilizando a base de dados COLOCAR FONTE DA BASE DE DADOS AQUI.
+
+Para realizar a previsão, o modelo de IA obtém a última leitura dos sensores de nível de água e condições ambientais, e utiliza essas informações para prever a probabilidade de enchentes na região.
+
+O usuário também pode realizar a previsão de enchentes diretamente no dashboard.
+
+Primeiramente, segue abaixo a view de exploração da base de dados utilizada para o treinamento do modelo de IA.
+
+<p align="center">
+  <img src="assets/readme/dashboard/modelo_preditivo/exploracao_dados_1.JPG" alt="exploracao_dados_1" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/modelo_preditivo/exploracao_dados_2.JPG" alt="exploracao_dados_2" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/modelo_preditivo/exploracao_dados_2.JPG" alt="exploracao_dados_2" border="0" width=70% height=70%>
+</p>
+
+A seguir, a view onde o usuário pode realizar a previsão de enchentes, que utiliza o modelo de IA treinado pelo grupo.
+
+<p align="center">
+  <img src="assets/readme/dashboard/modelo_preditivo/previsao_de_enchentes_manual.JPG" alt="previsao_de_enchentes_manual" border="0" width=70% height=70%>
 </p>
 
 ## 📁 Estrutura de pastas
