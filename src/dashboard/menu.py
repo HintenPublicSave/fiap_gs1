@@ -4,7 +4,7 @@ from src.dashboard.database.exportar import exportar_db_page
 from src.dashboard.database.importar import importar_db_page
 from src.dashboard.generic.table_view import TableView
 from src.dashboard.modelo_preditivo.exploracao_de_dados import exploracao_de_dados
-from src.dashboard.modelo_preditivo.modelo_preditivo import previsao_manual_page
+from src.dashboard.modelo_preditivo.previsoes import previsao_manual_page
 from src.dashboard.principal import get_principal_page
 from src.database.dynamic_import import import_models
 
