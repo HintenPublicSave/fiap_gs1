@@ -1,6 +1,6 @@
 Modelo,Accuracy,Precision,Recall,F1 Score,ROC AUC
+DecTree d3,1.0,1.0,1.0,1.0,1.0
 GradBoost 200,1.0,1.0,1.0,1.0,1.0
-GradBoost 50,1.0,1.0,1.0,1.0,1.0
-GradBoost 100,1.0,1.0,1.0,1.0,1.0
-AdaBoost 50,1.0,1.0,1.0,1.0,1.0
-DecTree d10,1.0,1.0,1.0,1.0,1.0
+Bagging DT d10,1.0,1.0,1.0,1.0,1.0
+Bagging DT d3,1.0,1.0,1.0,1.0,1.0
+Bagging DT d5,1.0,1.0,1.0,1.0,1.0
