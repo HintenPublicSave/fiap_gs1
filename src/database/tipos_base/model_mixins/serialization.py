@@ -3,12 +3,16 @@ AVISO: Este arquivo define apenas mixins para uso em herança múltipla.
 NÃO importe este arquivo diretamente como módulo principal.
 """
 import json
+import logging
+from io import BytesIO
 from typing import Self, Optional
-from sqlalchemy import inspect, String, Enum, Float, Boolean, Integer, DateTime, BinaryExpression, UnaryExpression
+from sqlalchemy import inspect, String, Enum, Float, Boolean, Integer, DateTime, BinaryExpression, UnaryExpression, LargeBinary
 import pandas as pd
 from typing import List
 from src.database.tipos_base.database import Database
 from src.database.tipos_base.model_mixins.fields import _ModelFieldsMixin
+from PIL import Image
+import base64
 
 
 class _ModelSerializationMixin(_ModelFieldsMixin):
@@ -73,6 +77,19 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
                     data[field.name] = None if data_raw.get(field.name) is None else pd.to_datetime(
                         data_raw[field.name], errors='coerce')
 
+                elif isinstance(field.type, LargeBinary):
+                    # LargeBinary pode ser convertido para bytes
+
+                    if isinstance(data_raw.get(field.name), bytes):
+                        data[field.name] = data_raw.get(field.name)
+
+                    elif isinstance(data_raw.get(field.name), str):
+
+                        data[field.name] = base64.b64decode(data_raw.get(field.name))
+
+                    else:
+                        data[field.name] = data_raw.get(field.name)
+
                 else:
                     data[field.name] = data_raw.get(field.name)
 
@@ -103,7 +120,24 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
 
             query = query.with_entities(*campos_para_retornar)
 
-            return pd.read_sql(query.statement, session.bind)
+            df = pd.read_sql(query.statement, session.bind)
+
+            # Converte campos LargeBinary para base64
+            for field in campos_para_retornar:
+                # field pode ser Column ou InstrumentedAttribute
+                column = getattr(field, 'property', None)
+                if column is not None:
+                    column = getattr(column, 'columns', [None])[0]
+                else:
+                    column = getattr(field, 'expression', None)
+                if column is not None and hasattr(column, 'type') and isinstance(column.type, LargeBinary):
+                    col_name = field.key if hasattr(field, 'key') else field.name
+                    if col_name in df.columns:
+                        df[col_name] = df[col_name].apply(
+                            lambda x: base64.b64encode(x).decode('utf-8') if isinstance(x, (bytes, bytearray)) and x is not None else x
+                        )
+
+            return df
 
     @classmethod
     def as_dataframe_display_all(cls, select_fields: Optional[List[str]] = None) -> pd.DataFrame:
