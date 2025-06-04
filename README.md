@@ -233,6 +233,69 @@ LOGGING_ENABLED=true
 > 💡 **ATENÇÃO:**  
 > Para o sistema funcionar corretamente é necessário criar o arquivo `.env` na raiz do projeto, e fornecer as chaves das apis supracitadas.
 
+### Sobre o Sistema
+
+Ao executar o sistema, se foi setado o SQL_LITE como `false`, primeiramente você verá uma tela de login para inserir o usuário e senha do banco de dados Oracle da FIAP. Após o login, você terá acesso ao dashboard, onde poderá visualizar os dados coletados pelos sensores, gerar posts informativos e monitorar as condições ambientais em tempo real.
+
+## Login
+
+<p align="center">
+  <img src="assets/readme/dashboard/login.JPG" alt="login" border="0" width=70% height=70%>
+</p>
+
+> Preencha o usuário e senha do banco de dados Oracle da FIAP para acessar o dashboard.
+ 
+## Geração de posts para redes sociais
+
+Ao entrar no sistema, o usuário será direcionado para a página de geração de posts, onde poderá criar posts informativos com base nos dados coletados pelos sensores e nas condições ambientais atuais.
+
+<p align="center">
+  <img src="assets/readme/dashboard/assistente_virtual.JPG" alt="assistente_virtual" border="0" width=70% height=70%>
+</p>
+
+O usuário poderá interagir normalmente com o assistente virtual, que irá gerar posts informativos com base no solicitado.
+
+<p align="center">
+  <img src="assets/readme/dashboard/criar_post.JPG" alt="criar_post" border="0" width=70% height=70%>
+</p>
+
+Também é possível solicitar para o agente criar e adicionar imagens aos posts, que serão utilizadas para ilustrar as informações e aumentar o impacto visual das comunicações.
+
+<p align="center">
+  <img src="assets/readme/dashboard/criar_imagem_1.JPG" alt="criar_imagem_1" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/criar_imagem_2.JPG" alt="criar_imagem_2" border="0" width=70% height=70%>
+</p>
+
+> **Nota**
+> Algumas vezes o agente pode não criar a imagem diretamente, mas sim sugerir o prompt da criação de imagem. Se isso ocorrer é só falar para ele que o prompt está aprovado e que ele pode gerar a imagem, conforme supra ilustrado.
+
+Por fim, é possível solicitar para o agente salvar o post criado, que será armazenado no banco de dados e poderá ser visualizado posteriormente.
+
+<p align="center">
+  <img src="assets/readme/dashboard/salvar_post.JPG" alt="salvar_post" border="0" width=70% height=70%>
+</p>
+
+## Previsão do tempo e de enchentes
+
+O gente de IA também é capaz de coletar dados meteorológicos e prever condições climáticas, como enchentes, utilizando a API do OpenWeather. O usuário pode solicitar informações sobre o clima atual e previsões para os próximos dias.
+
+<p align="center">
+  <img src="assets/readme/dashboard/previsao_do_tempo.JPG" alt="previsao_do_tempo" border="0" width=70% height=70%>
+</p>
+
+> Para obter a previsão do tempo, o agente utiliza a API do OpenWeather, que fornece dados atualizados sobre as condições climáticas em tempo real.
+
+<p align="center">
+  <img src="assets/readme/dashboard/previsao_de_enchentes.JPG" alt="previsao_de_enchentes" border="0" width=70% height=70%>
+</p>
+
+> **ATENÇÃO**
+> A previsão de enchentes é baseada no modelo de IA treinado pelo grupo, que será discutido abaixo. O Agente de IA chama uma tool que tem acesso ao modelo preditivo de enchentes, e depois passa a resposta para o usuário.
+
+
+
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:

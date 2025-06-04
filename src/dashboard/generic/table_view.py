@@ -115,7 +115,8 @@ class TableView:
             filters=None if not filters_valid else filters_valid,
             order_by=[self.model.id.desc()] if self.model.id is not None else None,
             limit=self.model.__table_view_itens_per_page__,
-            offset=offset
+            offset=offset,
+            as_display=True
         )
 
         with col1:

@@ -183,7 +183,7 @@ class _ModelSerializationMixin(_ModelFieldsMixin):
             if as_display:
                 colum_names = {}
                 for column in dataframe.columns:
-                    colum_names[column] = cls.get_field_display_name(column)
-                dataframe.rename(columns=colum_names)
 
+                    colum_names[column] = cls.get_field_display_name(column)
+                dataframe = dataframe.rename(columns=colum_names)
             return dataframe
