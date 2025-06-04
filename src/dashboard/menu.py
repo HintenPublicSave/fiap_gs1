@@ -4,6 +4,7 @@ from src.dashboard.database.exportar import exportar_db_page
 from src.dashboard.database.importar import importar_db_page
 from src.dashboard.generic.table_view import TableView
 from src.dashboard.modelo_preditivo.exploracao_de_dados import exploracao_de_dados
+from src.dashboard.modelo_preditivo.modelo_preditivo import previsao_manual_page
 from src.dashboard.principal import get_principal_page
 from src.database.dynamic_import import import_models
 
@@ -39,7 +40,7 @@ def export_import_menu():
     Cria as páginas de exportação e importação do banco de dados.
     """
 
-    st.sidebar.header("Exportar/Importar")
+    st.sidebar.header("Exportar/Importar DB")
     st.sidebar.page_link(exportar_db_page)
     st.sidebar.page_link(importar_db_page)
 
@@ -51,6 +52,7 @@ def modelo_preditivo_menu():
 
     st.sidebar.header("Modelo Preditivo")
     st.sidebar.page_link(exploracao_de_dados)
+    st.sidebar.page_link(previsao_manual_page)
 
 def menu():
     """

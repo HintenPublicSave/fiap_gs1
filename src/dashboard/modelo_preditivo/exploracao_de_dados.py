@@ -8,7 +8,7 @@ def view():
     
     st.title("💧 Análise Interativa de Cota e Chuva")
     
-    data = pd.read_csv("COTAxCHUVA.csv")
+    data = pd.read_csv("src/modelo_preditivo/COTAxCHUVA.csv")
     df = pd.DataFrame(data)
     
 
