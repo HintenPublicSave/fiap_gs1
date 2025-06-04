@@ -25,7 +25,7 @@ class SimpleTableFilter:
     value: Any = None
 
 
-    def get_sqlalchemy_filter(self, model:type['Model']) -> BinaryExpression:
+    def get_sqlalchemy_filter(self, model:type['Model'], value:Any = None) -> BinaryExpression:
         """
         Retorna o filtro SQLAlchemy correspondente ao valor fornecido.
 
@@ -36,18 +36,21 @@ class SimpleTableFilter:
         Returns:
             BinaryExpression: Filtro SQLAlchemy.
         """
+
+        correct_value = value if value is not None else self.value
+
         if self.operator == "==":
-            return getattr(model, self.field) == self.value
+            return getattr(model, self.field) == correct_value
         elif self.operator == "!=":
-            return getattr(model, self.field) != self.value
+            return getattr(model, self.field) != correct_value
         elif self.operator == "<":
-            return getattr(model, self.field) < self.value
+            return getattr(model, self.field) < correct_value
         elif self.operator == ">":
-            return getattr(model, self.field) > self.value
+            return getattr(model, self.field) > correct_value
         elif self.operator == "<=":
-            return getattr(model, self.field) <= self.value
+            return getattr(model, self.field) <= correct_value
         elif self.operator == ">=":
-            return getattr(model, self.field) >= self.value
+            return getattr(model, self.field) >= correct_value
         else:
             raise ValueError(f"Operador '{self.operator}' não suportado.")
 

@@ -1,5 +1,4 @@
 import logging
-from src.database.generator.criar_sensores import criar_sensores_padrao
 from src.database.tipos_base.database import Database
 import streamlit as st
 

@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import List, Self
+from typing import List, Self, Union
 from sqlalchemy import Sequence, String, ForeignKey, Float, DateTime, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database.tipos_base.database import Database
@@ -21,6 +21,19 @@ class TipoSensorEnum(StrEnum):
 
         return super().name
 
+    def get_type_for_generation(self) -> Union[type[float], type[int], type[bool]]:
+        """Retorna o tipo de dado esperado para geração de dados aleatórios."""
+        if self.value == "P":
+            return float
+
+        return float
+
+    def get_range_for_generation(self) -> tuple[float, float] or None:
+        """Retorna o intervalo de valores esperados para geração de dados aleatórios."""
+        if self.value == "P":
+            return 0.0, 200.0
+
+        return None
 
 class TipoSensor(Model):
     """Representa um tipo de sensor que pode ser utilizado em uma plantação."""

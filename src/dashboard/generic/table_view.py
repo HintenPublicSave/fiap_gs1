@@ -5,6 +5,7 @@ from src.dashboard.generic.edit_view import EditView
 from src.dashboard.generic.model_query_filters import ModelQueryFilters
 from src.dashboard.generic.simple_plots import SimplePlotView
 from src.database.tipos_base.model import Model
+from math import ceil
 
 
 class TableView:
@@ -108,7 +109,7 @@ class TableView:
 
         for f in model_filters.get_filters():
             if f.value is not None or f.optional == False:
-                filters_valid.append(f.get_sqlalchemy_filter(self.model))
+                filters_valid.append(f.get_sqlalchemy_filter(self.model, model_filters.get_correct_filter_value(f)))
 
         dataframe = self.model.filter_dataframe(
             select_fields=self.model.__table_view_fields__,
@@ -161,11 +162,16 @@ class TableView:
         if total_itens < self.model.__table_view_itens_per_page__:
             return
 
-        total_paginas = (total_itens // self.model.__table_view_itens_per_page__) + 1
+        total_paginas = ceil(total_itens / self.model.__table_view_itens_per_page__)
         coluna_paginas, coluna_botao = st.columns([4, 1])
 
+        pagina_atual = ceil(int(st.query_params.get('offset', 0)) / self.model.__table_view_itens_per_page__) + 1
+
+        if pagina_atual > total_paginas:
+            st.query_params.pop('offset', None)
+            st.rerun()
+
         with coluna_paginas:
-            pagina_atual = int(st.query_params.get('offset', 0)) // self.model.__table_view_itens_per_page__ + 1
 
             st.write(f"Página {pagina_atual} de {total_paginas}")
 
@@ -182,13 +188,17 @@ class TableView:
                     st.query_params['offset'] = offset_value
                     st.rerun()
 
-            st.number_input(
+            nova_pagina = st.number_input(
                 "Página",
                 min_value=1,
                 max_value=total_paginas,
+                value=pagina_atual,
                 step=1,
-                on_change=mudar_pagina
             )
+
+            if nova_pagina != pagina_atual:
+                mudar_pagina(nova_pagina)
+
 
     def edit_view(self, model_id: int|None = None):
         """

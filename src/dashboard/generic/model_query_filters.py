@@ -1,11 +1,12 @@
 from sqlalchemy import BinaryExpression
-
+from datetime import datetime
 from src.dashboard.generic.model_form_fields import ModelFormField
 from src.database.tipos_base.model import Model
 import streamlit as st
 import json
 import base64
 from typing import Any
+from sqlalchemy import String, Text, Enum, Float, Boolean, Integer, DateTime, LargeBinary
 
 from src.database.tipos_base.model_mixins.display import SimpleTableFilter
 
@@ -37,7 +38,10 @@ class ModelQueryFilters:
             filters_json = json.loads(filters_base_64)
 
             for f in filters_json:
+                _filtro = SimpleTableFilter.from_json(f)
                 filters_parsed.append(SimpleTableFilter.from_json(f))
+
+
 
         self.filters_parsed = filters_parsed
         self._render_filters = filters if filters is not None else self.model.__table_view_filters__
@@ -56,7 +60,46 @@ class ModelQueryFilters:
         Retorna os filtros aplicados ao modelo como expressões SQLAlchemy.
         :return: Lista de expressões SQLAlchemy.
         """
-        return [filtro.get_sqlalchemy_filter(self.model) for filtro in self.filters_parsed if filtro.value is not None or filtro.optional == False]
+
+        return [filtro.get_sqlalchemy_filter(self.model, self.get_correct_filter_value(filtro)) for filtro in self.filters_parsed if filtro.value is not None or filtro.optional == False]
+
+    def get_correct_filter_value(self, filter: SimpleTableFilter) -> Any:
+        """
+        Retorna o valor correto do filtro, considerando o valor atual ou o valor padrão.
+        :param filter: O filtro para o qual o valor será obtido.
+        :return: O valor do filtro.
+        """
+        if filter.value is not None:
+
+            field = getattr(self.model, filter.field, None)
+
+            if field is None:
+                raise AttributeError(f"Campo '{filter.field}' não encontrado no modelo '{self.model.__name__}'.")
+
+            if isinstance(field.type, Enum):
+
+                return field.type.enum_class(filter.value)
+
+            elif isinstance(field.type, Float):
+                return float(filter.value)
+
+            elif isinstance(field.type, Integer):
+                return int(filter.value)
+
+            elif isinstance(field.type, Boolean):
+
+                return bool(filter.value)
+
+            elif isinstance(field.type, DateTime):
+                return datetime.fromisoformat(filter.value)
+
+            elif isinstance(field.type, Text) or isinstance(field.type, String):
+                return str(filter.value)
+
+            else:
+                raise TypeError(f"Tipo de campo '{field.type}' não suportado para o filtro '{filter.field}'.")
+
+        return None
 
     def get_filter_values(self) -> dict[str, Any]:
         """
