@@ -51,10 +51,18 @@ Desenvolvemos um **Agente de Inteligência Artificial** voltado à **criação a
 
 Essa solução atua como um suporte operacional, gerando conteúdos em tempo real com base em dados reais sobre desastres. Seu objetivo é **aumentar a velocidade e a eficácia na divulgação de alertas e instruções** à população em risco.
 
+O agente é capaz de:
+- **Gerar posts informativos e de alertas** com base em dados coletados por sensores ambientais e previsões meteorológicas;
+- **Criar imagens ilustrativas** para aumentar o impacto visual das comunicações;
+- **Obter previsões meteorológicas** utilizando APIs externas;
+- **Prever enchentes** com base em dados históricos, condições atuais e leituras de sensores, utilizando um modelo de IA treinado pelo grupo;
+
 ## Possíveis Upgrades para o Futuro
 
 - **Geração de audio e video**: Expansão do agente para criar conteúdos multimídia, como vídeos curtos e mensagens de voz, que podem ser mais eficazes em alcançar públicos diversos, muito embora o grupo tenha utilizado o a IA VEO3 para fazer videos da aparesentação, devido a limitações orçamentárias, a solução inicial se concentra em posts estáticos e imagens.
 - **Integração com sistemas de alerta**: Conectar o agente a plataformas de alerta em massa, como sirenes e aplicativos de mensagens, para garantir que as informações cheguem rapidamente a todos os cidadãos.
+- **Análise de sentimento e feedback**: Implementar mecanismos para analisar o sentimento da população em relação às comunicações recebidas, permitindo ajustes dinâmicos nas mensagens e estratégias de engajamento.
+- **Melhoria do modelo de previsão de enchentes**: Aperfeiçoar o modelo de previsão de enchentes com dados adicionais e feedback das equipes de emergência, aumentando a precisão das previsões.
 - **Análise de dados históricos**: Ampliar a capacidade do agente de analisar dados históricos de desastres para prever padrões e melhorar a eficácia das comunicações futuras.
 - **Expansão para outras áreas**: Adaptar o agente para atuar em outras situações de emergência, como pandemias, crises de saúde pública ou desastres tecnológicos, ampliando seu escopo de atuação.
 - **Localização e personalização**: Permitir que o agente gere conteúdos personalizados com base na localização geográfica do usuário, adaptando as mensagens às especificidades de cada região afetada.
@@ -75,7 +83,7 @@ ATUALIZAR AQUI
 
 - Aumento significativo da **agilidade e eficácia da comunicação** de riscos e procedimentos de segurança;
 - **Evacuação mais rápida** e coordenada de comunidades ameaçadas;
-- Redução da necessidade de ações logísticas de alto custo;
+- Redução da necessidade de ações logísticas de alto custo e complexas, em situações onde a demanda por recursos é alta;
 - Suporte prático às operações de campo com **alertas visualmente otimizados** e fáceis de replicar;
 - Ferramenta expansível para campanhas preventivas e treinamentos.
 
@@ -157,7 +165,7 @@ A escolha de um banco de dados relacional foi motivada pelos seguintes fatores:
 - **Integração com Ferramentas de Visualização:**  
   A estrutura relacional favorece a conexão com dashboards e ferramentas de BI, potencializando o uso dos dados coletados.
 
-### INSTALANDO E EXECUTANDO O PROJETO
+### 3️⃣ INSTALANDO E EXECUTANDO O PROJETO
 
 O sistema foi desenvolvido em Python e utiliza um banco de dados Oracle para armazenar os dados. O código é modularizado, permitindo fácil manutenção e expansão.
 
@@ -175,6 +183,9 @@ O sistema foi desenvolvido em Python e utiliza um banco de dados Oracle para arm
   - fastapi==0.115.12
   - pydantic==2.11.5
   - uvicorn==0.34.3
+  - plotly==6.1.2
+  - scikit-learn==1.6.1
+  - joblib==1.5.1
 
 ## 📂 Instalação
 
@@ -233,7 +244,7 @@ LOGGING_ENABLED=true
 > 💡 **ATENÇÃO:**  
 > Para o sistema funcionar corretamente é necessário criar o arquivo `.env` na raiz do projeto, e fornecer as chaves das apis supracitadas.
 
-### Sobre o Sistema
+### 4️⃣ Visão Geral do Sistema
 
 Ao executar o sistema, se foi setado o SQL_LITE como `false`, primeiramente você verá uma tela de login para inserir o usuário e senha do banco de dados Oracle da FIAP. Após o login, você terá acesso ao dashboard, onde poderá visualizar os dados coletados pelos sensores, gerar posts informativos e monitorar as condições ambientais em tempo real.
 
@@ -391,7 +402,7 @@ Primeiramente, segue abaixo a view de exploração da base de dados utilizada pa
   <img src="assets/readme/dashboard/modelo_preditivo/exploracao_dados_2.JPG" alt="exploracao_dados_2" border="0" width=70% height=70%>
 </p>
 <p align="center">
-  <img src="assets/readme/dashboard/modelo_preditivo/exploracao_dados_2.JPG" alt="exploracao_dados_2" border="0" width=70% height=70%>
+  <img src="assets/readme/dashboard/modelo_preditivo/exploracao_dados_3.JPG" alt="exploracao_dados_3" border="0" width=70% height=70%>
 </p>
 
 A seguir, a view onde o usuário pode realizar a previsão de enchentes, que utiliza o modelo de IA treinado pelo grupo.
