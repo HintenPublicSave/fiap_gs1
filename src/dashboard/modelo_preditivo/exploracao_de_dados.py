@@ -3,10 +3,8 @@ import pandas as pd
 import plotly.express as px
 import os
 
-
 def view():
-    
-    
+
     
     st.title("💧 Análise Interativa de Cota e Chuva")
     
@@ -29,11 +27,15 @@ def view():
         value=(0, len(datas_disponiveis) - 1),
         format_func=lambda i: datas_disponiveis[i]
     )
-    df_filtrado = df.iloc[start_idx:end_idx + 1]
+    df_filtrado:pd.DataFrame = df.iloc[start_idx:end_idx + 1]
 
     #  Tabela com os dados filtrados
     st.subheader("📄 Dados")
     st.dataframe(df_filtrado[["DiaMes", "Cota", "Chuva"]])
+
+    st.subheader("📊 Estatísticas Descritivas")
+
+    st.write(df_filtrado.describe())
 
     #  Gráficos
     col1, col2 = st.columns(2)
@@ -81,8 +83,8 @@ def view():
         st.info("⚠️ São necessárias pelo menos duas variáveis numéricas para gerar o mapa de correlação.")
 
 
-pagina_minha_view = st.Page(
+exploracao_de_dados = st.Page(
     view,
-    title="Minha View",
-    url_path="minha_view",
+    title="Exploração de Dados",
+    url_path="exploracao_de_dados",
 )

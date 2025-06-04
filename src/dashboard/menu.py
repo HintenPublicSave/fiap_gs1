@@ -3,7 +3,7 @@ import streamlit as st
 from src.dashboard.database.exportar import exportar_db_page
 from src.dashboard.database.importar import importar_db_page
 from src.dashboard.generic.table_view import TableView
-from src.dashboard.minha_view import pagina_minha_view
+from src.dashboard.modelo_preditivo.exploracao_de_dados import exploracao_de_dados
 from src.dashboard.principal import get_principal_page
 from src.database.dynamic_import import import_models
 
@@ -43,6 +43,15 @@ def export_import_menu():
     st.sidebar.page_link(exportar_db_page)
     st.sidebar.page_link(importar_db_page)
 
+def modelo_preditivo_menu():
+    """
+    Função para exibir o menu lateral do aplicativo.
+    Cria as páginas de modelo preditivo.
+    """
+
+    st.sidebar.header("Modelo Preditivo")
+    st.sidebar.page_link(exploracao_de_dados)
+
 def menu():
     """
     Função para exibir o menu lateral do aplicativo.
@@ -53,6 +62,5 @@ def menu():
     st.sidebar.page_link(get_principal_page())
     crud_menu()
     export_import_menu()
-    st.sidebar.header("Exploração de Dados")
-    st.sidebar.page_link(pagina_minha_view)
+    modelo_preditivo_menu()
 
