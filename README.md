@@ -157,7 +157,7 @@ A escolha de um banco de dados relacional foi motivada pelos seguintes fatores:
 - **Integração com Ferramentas de Visualização:**  
   A estrutura relacional favorece a conexão com dashboards e ferramentas de BI, potencializando o uso dos dados coletados.
 
-### EXECUTAR O SISTEMA E REALIZAR OPERAÇÕES CRUD
+### INSTALANDO E EXECUTANDO O PROJETO
 
 O sistema foi desenvolvido em Python e utiliza um banco de dados Oracle para armazenar os dados. O código é modularizado, permitindo fácil manutenção e expansão.
 
@@ -294,7 +294,75 @@ O gente de IA também é capaz de coletar dados meteorológicos e prever condiç
 > **ATENÇÃO**
 > A previsão de enchentes é baseada no modelo de IA treinado pelo grupo, que será discutido abaixo. O Agente de IA chama uma tool que tem acesso ao modelo preditivo de enchentes, e depois passa a resposta para o usuário.
 
+## Possíveis erros ao interagir com o agente
 
+O projeto utiliza uma chave de API para desenvolvedores do Google, que pode ter limitações de uso. 
+Caso o usuário encontre erros ao interagir com o agente, como mensagens de erro ou falhas na geração de posts, é possível que a chave tenha atingido o limite de requisições.
+Para resolver esse problema, o usuário pode tentar novamente mais tarde ou utilizar uma chave de API própria, conforme explicado na seção "Arquivo de Configuração".
+O limite de requisições da API é de 60 requisições por minuto e 1500 requisições por dia. No entanto, os modelos podem ficar fora do ar ao longo do dia, dependendo do fluxo de usuários que estão utilizando a API.
+
+<p align="center">
+  <img src="assets/readme/dashboard/erro_503.JPG" alt="erro_503" border="0" width=70% height=70%>
+</p>
+
+## Visualizando e alterando imagens criadas
+
+As imagens criadas pelo agente de IA podem ser visualizadas e alteradas diretamente no dashboard. O usuário pode acessar a página de Arquvios, onde poderá ver todas as imagens criadas, editar ou excluir aquelas que não forem mais necessárias.
+
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/arquivos.JPG" alt="arquivos" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/pagina_visualizacao_arquivos.JPG" alt="pagina_visualizacao_arquivos" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/criar_editar_arquivos.JPG" alt="criar_editar_arquivos" border="0" width=70% height=70%>
+</p>
+
+Para salvar um novo arquivo, o usuário pode clicar no botão "Novo", preencher o formulário e clicar em "Salvar". O arquivo será adicionado à lista de arquivos e poderá ser utilizado posteriormente na criação de posts.
+
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/criar_arquivo.JPG" alt="criar_arquivo" border="0" width=70% height=70%>
+</p>
+
+Para editar um arquivo existente, o usuário pode selecionar um arquivo da lista e clicar no botão "Editar", fazer as alterações necessárias e clicar em "Salvar". O arquivo será atualizado na lista de arquivos.
+
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/editar_arquivo_1.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/editar_arquivo_2.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/editar_arquivo_3.JPG" alt="editar_arquivo_1" border="0" width=70% height=70%>
+</p>
+
+Para excluir um arquivo, o usuário pode selecionar um arquivo da lista e clicar no botão "Editar" e posteriormente "Excluir". O arquivo será removido da lista de arquivos.
+
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/excluir_1.JPG" alt="excluir_1" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/excluir_2.JPG" alt="excluir_2" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/excluir_3.JPG" alt="excluir_3" border="0" width=70% height=70%>
+</p>
+
+## Visualizando e alterando posts criados
+
+A lógica de visualização e alteração de posts criados é semelhante à de arquivos. O usuário pode acessar a página de Posts, onde poderá ver todos os posts criados, editar ou excluir aqueles que não forem mais necessários.
+Posto isto, seguem abaixo algumas imagens que ilustram a página de posts, bem como a visualização e edição de posts criados.
+
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/posts_1.JPG" alt="posts_1" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/posts_2.JPG" alt="posts_2" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/arquivos/posts_3.JPG" alt="posts_3" border="0" width=70% height=70%>
+</p>
 
 ## 📁 Estrutura de pastas
 

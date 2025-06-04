@@ -178,6 +178,8 @@ class ModelFormField:
 
             if uploaded_file is not None:
                 new_value = uploaded_file.read()
+            else:
+                new_value = initial_value
 
         else:
             logging.warning(f"Tipo de campo não suportado: {self.field.type}")
