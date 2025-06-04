@@ -1,6 +1,7 @@
 from src.database.dynamic_import import import_models
 from src.database.tipos_base.database import Database
 from sqlalchemy import text
+import logging
 
 
 def get_sequences_from_db():
@@ -32,7 +33,7 @@ def reset_contador_ids():
 
     # Checa se o engine é Oracle
     if 'oracle' not in Database.engine.name.lower():
-        print("O banco de dados não é Oracle. A função reset_contador_ids só é suportada para bancos de dados Oracle.")
+        logging.debug("O banco de dados não é Oracle. A função reset_contador_ids só é suportada para bancos de dados Oracle.")
         return
 
     session = Database.session()
