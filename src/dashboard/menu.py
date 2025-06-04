@@ -5,6 +5,7 @@ from src.dashboard.database.importar import importar_db_page
 from src.dashboard.generic.table_view import TableView
 from src.dashboard.modelo_preditivo.exploracao_de_dados import exploracao_de_dados
 from src.dashboard.modelo_preditivo.previsoes import previsao_manual_page
+from src.dashboard.previsao_do_tempo.previsao_do_tempo_view import previsao_do_tempo_page
 from src.dashboard.principal import get_principal_page
 from src.database.dynamic_import import import_models
 
@@ -54,6 +55,15 @@ def modelo_preditivo_menu():
     st.sidebar.page_link(exploracao_de_dados)
     st.sidebar.page_link(previsao_manual_page)
 
+def previsao_do_tempo_menu():
+    """
+    Função para exibir o menu lateral do aplicativo.
+    Cria as páginas de previsão do tempo.
+    """
+
+    st.sidebar.header("Previsão do Tempo")
+    st.sidebar.page_link(previsao_do_tempo_page)
+
 def menu():
     """
     Função para exibir o menu lateral do aplicativo.
@@ -64,5 +74,6 @@ def menu():
     st.sidebar.page_link(get_principal_page())
     crud_menu()
     export_import_menu()
+    previsao_do_tempo_menu()
     modelo_preditivo_menu()
 

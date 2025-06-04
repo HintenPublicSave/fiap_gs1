@@ -33,7 +33,7 @@ def get_5day_forecast(cidade, api_key):
         return None
 
 # --- Função de Análise de Chuva ---
-def analisar_chuva_5day(previsao_data):
+def analisar_chuva_5day(previsao_data) -> dict or None:
     """
     Analisa os dados da previsão de 5 dias/3 horas, mostrando a probabilidade
     e a quantidade de chuva para cada período nos próximos 5 dias.
@@ -96,10 +96,71 @@ def analisar_chuva_5day(previsao_data):
     else: # Se nem volume em mm nem probabilidade significativa
         print(f"Não há previsão de chuva (nem volume em mm, nem probabilidade significativa) nos próximos 5 dias.")
 
+def chuva_por_dia(previsao_data:dict) -> dict:
+    """
+    Retorna um dicionário com a soma dos mm de chuva e a média da probabilidade de chuva para cada dia.
+    Exemplo de retorno:
+    {
+        '2024-06-10': {'chuva_mm': 12.5, 'media_pop': 35.2},
+        '2024-06-11': {'chuva_mm': 0.0, 'media_pop': 10.0},
+        ...
+    }
+    """
+    if not previsao_data or 'list' not in previsao_data:
+        raise ValueError("Dados de previsão inválidos ou ausentes.")
+
+    resultado = {}
+    contagem_pop = {}
+
+    for previsao_slot in previsao_data['list']:
+        dt_txt = previsao_slot.get('dt_txt', None)
+        if not dt_txt:
+            continue
+        data_str = dt_txt.split(' ')[0]  # 'YYYY-MM-DD'
+        pop = previsao_slot.get('pop', 0) * 100  # %
+        chuva_mm_3h = 0.0
+        if 'rain' in previsao_slot and isinstance(previsao_slot['rain'], dict) and '3h' in previsao_slot['rain']:
+            chuva_mm_3h = float(previsao_slot['rain']['3h'])
+
+        if data_str not in resultado:
+            resultado[data_str] = {'chuva_mm': 0.0, 'soma_pop': 0.0}
+            contagem_pop[data_str] = 0
+
+        resultado[data_str]['chuva_mm'] += chuva_mm_3h
+        resultado[data_str]['soma_pop'] += pop
+        contagem_pop[data_str] += 1
+
+    # Calcula a média da probabilidade de chuva para cada dia
+    for data in resultado:
+        if contagem_pop[data] > 0:
+            resultado[data]['media_pop'] = resultado[data]['soma_pop'] / contagem_pop[data]
+        else:
+            resultado[data]['media_pop'] = 0.0
+        del resultado[data]['soma_pop']
+
+    return resultado
+
+def get_previsao_de_chuva(cidade:str) -> dict:
+    """
+    Obtém a previsão de chuva para uma cidade específica.
+    :param cidade: Nome da cidade para a qual obter a previsão.
+    :return: Dicionário com a previsão de chuva.
+    """
+    api_key = os.getenv('API_MET')
+
+    if not api_key:
+        raise ValueError("Chave da API não fornecida.")
+
+    previsao_data = get_5day_forecast(cidade, api_key)
+
+    if not previsao_data:
+        raise ValueError("Não foi possível obter a previsão do tempo.")
+
+    return chuva_por_dia(previsao_data)
 
 # --- Principal ---
 if __name__ == "__main__":
-    load_dotenv()
+    load_dotenv("../../.env")
     api_key = os.getenv('API_MET')
     
     if not api_key:
@@ -112,7 +173,8 @@ if __name__ == "__main__":
 
         if cidade_usuario:
             previsao = get_5day_forecast(cidade_usuario, api_key)
+
             if previsao:
-                analisar_chuva_5day(previsao)
+                print(chuva_por_dia(previsao))
         else:
             print("Nome da cidade não fornecido.")

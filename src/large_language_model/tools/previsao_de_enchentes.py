@@ -1,7 +1,7 @@
 import os
 import io
 import contextlib
-from src.API_met.api import get_5day_forecast, analisar_chuva_5day
+from src.api_metereologica.api import get_5day_forecast, analisar_chuva_5day
 from src.large_language_model.tipos_base.base_tools import BaseTool
 
 class EnchenteTool(BaseTool):

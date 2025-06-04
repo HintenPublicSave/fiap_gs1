@@ -5,6 +5,7 @@ from src.dashboard.database.importar import importar_db_page
 from src.dashboard.global_messages import get_global_messages
 from src.dashboard.modelo_preditivo.exploracao_de_dados import exploracao_de_dados
 from src.dashboard.modelo_preditivo.previsoes import previsao_manual_page
+from src.dashboard.previsao_do_tempo.previsao_do_tempo_view import previsao_do_tempo_page
 from src.dashboard.principal import get_principal_page
 from src.dashboard.generic.table_view import TableView
 from src.database.dynamic_import import import_models
@@ -34,9 +35,6 @@ def navigation():
     :return:
     """
 
-    #todo arrumar logo
-    # st.logo("assets/logo/logo-farmtech-solutions-horizontal.png", size='large')
-
     get_global_messages()
 
     current_page = st.navigation([
@@ -45,7 +43,8 @@ def navigation():
         exportar_db_page,
         importar_db_page,
         exploracao_de_dados,
-        previsao_manual_page
+        previsao_manual_page,
+        previsao_do_tempo_page
     ])
 
     menu()
