@@ -316,6 +316,12 @@ O limite de requisições da API é de 60 requisições por minuto e 1500 requis
   <img src="assets/readme/dashboard/erro_503.JPG" alt="erro_503" border="0" width=70% height=70%>
 </p>
 
+## Possíveis alucinações que o agente pode ter
+
+O agente não é perfeito e pode apresentar alucinações, ou seja, gerar informações incorretas, irrelevantes ou até mesmo começar a responder em inglês.
+Isso pode ocorrer devido a limitações no modelo de IA ou na interpretação do prompt pelo agente.
+Caso isto ocorra, a melhor solução é clicar no botão "Novo Chat" e começar uma nova conversa.
+
 ## Visualizando e alterando imagens criadas
 
 As imagens criadas pelo agente de IA podem ser visualizadas e alteradas diretamente no dashboard. O usuário pode acessar a página de Arquvios, onde poderá ver todas as imagens criadas, editar ou excluir aquelas que não forem mais necessárias.
