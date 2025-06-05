@@ -3,6 +3,8 @@ import json
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+import pandas as pd
+import joblib
 
 # --- Função para interagir com a API ---
 def get_5day_forecast(cidade, api_key):
@@ -158,6 +160,38 @@ def get_previsao_de_chuva(cidade:str) -> dict:
 
     return chuva_por_dia(previsao_data)
 
+# --- Função principal de previsão de alagamento com 'Data' e 'Chuva' ---
+def prever_alagamento_usando_data_ddmm(cidade: str, modelo_path: str):
+    print("🔍 [DEBUG] Entrando na função de previsão de alagamento (usando modelo ML)")
+    dados_chuva = get_previsao_de_chuva(cidade)
+    if not dados_chuva:
+        print("Não foi possível obter a previsão de chuva.")
+        return
+
+    # Transformar em DataFrame
+    df = pd.DataFrame.from_dict(dados_chuva, orient='index')
+    df.reset_index(inplace=True)
+    df.rename(columns={'index': 'DataStr', 'chuva_mm': 'Chuva'}, inplace=True)
+
+    # Converter data YYYY-MM-DD para DDMM (como no dataset original)
+    df['Data'] = pd.to_datetime(df['DataStr']).dt.strftime('%d%m')
+
+    # Carregar o modelo
+    modelo = joblib.load(modelo_path)
+
+    # Converter 'Data' para o tipo que foi usado no treinamento (string ou inteiro)
+    # df['Data'] = df['Data'].astype(int)  # Descomente se o modelo espera int
+
+    # Realiza a previsão
+    previsoes = modelo.predict(df[['Data', 'Chuva']])
+    df['Alagamento'] = previsoes
+
+    # Exibe os resultados
+    for _, row in df.iterrows():
+        data_formatada = pd.to_datetime(row['DataStr']).strftime('%d/%m/%Y')
+        status = "⚠️ Alagamento" if row['Alagamento'] else "✅ Sem alagamento"
+        print(f"{data_formatada}: {status} | Chuva: {row['Chuva']:.2f} mm")
+
 # --- Principal ---
 if __name__ == "__main__":
     load_dotenv("../../.env")
@@ -170,6 +204,7 @@ if __name__ == "__main__":
         print("Chave da API não fornecida. Saindo.")
     else:
         cidade_usuario = input("Digite o nome da sua cidade: ").strip()
+        modelo_path = "../modelo_preditivo/modelos_salvos/BaggingDTd3.pkl"
 
         if cidade_usuario:
             previsao = get_5day_forecast(cidade_usuario, api_key)

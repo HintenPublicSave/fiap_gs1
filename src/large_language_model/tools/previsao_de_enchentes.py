@@ -1,8 +1,12 @@
 import os
 import io
 import contextlib
-from src.api_metereologica.api import get_5day_forecast, analisar_chuva_5day
+import pandas as pd
+import joblib
+from src.api_metereologica.api import analisar_chuva_5day
+from src.api_metereologica.api import get_5day_forecast
 from src.large_language_model.tipos_base.base_tools import BaseTool
+from src.api_metereologica.api import prever_alagamento_usando_data_ddmm
 
 class EnchenteTool(BaseTool):
 
@@ -17,11 +21,14 @@ class EnchenteTool(BaseTool):
         Parâmetro:
             cidade (str): O nome da cidade para a qual obter a previsão. Ex: 'São Paulo'
         """
-        print("Chamou função previsão de enchente")
+        print("🧠 [DEBUG] Iniciando previsão de alagamento com modelo treinado")
 
         api_key = os.getenv('API_MET')
+        
+        modelo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../modelo_preditivo/modelos_salvos/BaggingDtd3.pkl"))
 
         previsao_data = get_5day_forecast(cidade, api_key)
+        
 
         if not previsao_data:
             return {
@@ -34,17 +41,32 @@ class EnchenteTool(BaseTool):
                 analisar_chuva_5day(previsao_data)
             analise_formatada = output_buffer.getvalue()
         finally:
-            output_buffer.close() # para ter fechar o buffer
-        if not analise_formatada.strip(): # Verifica se algo foi capturado
+            output_buffer.close()
+
+        if not analise_formatada.strip():
             return {
                 'error': True,
                 'message': f"A análise da previsão para {cidade} não gerou conteúdo."
             }
+
+        # --- Parte 2: Previsão com modelo ML ---
+        try:
+            resultado_ml = prever_alagamento_usando_data_ddmm(previsao_data, modelo_path, cidade)
+        except Exception as e:
+            return {
+                'error': True,
+                'message': f"Erro ao prever alagamento com modelo: {e}"
+            }
+
+        # Combinar os dois resultados
+        saida_final = analise_formatada + "\n\n" + resultado_ml
+
         return {
-            'output': analise_formatada,
+            'output': saida_final,
             'error': False,
-            'message': f"Previsão detalhada de chuva para {cidade} obtida e analisada."
+            'message': f"Análise completa de chuva e alagamento obtida para {cidade}."
         }
+        
 
 
     def call_chat_display(self) -> str:
