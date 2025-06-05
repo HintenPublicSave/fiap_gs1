@@ -1,5 +1,8 @@
 from src.dashboard.main import main as dashboard_main
 from dotenv import load_dotenv
+from src.scripts.criar_tipos_e_sensores import criar_tipos_sensores_e_leituras
+
+
 import os
 
 def main():
@@ -14,3 +17,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    criar_tipos_sensores_e_leituras()
