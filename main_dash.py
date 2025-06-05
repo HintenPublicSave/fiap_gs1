@@ -17,4 +17,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    criar_tipos_sensores_e_leituras()
+    # criar_tipos_sensores_e_leituras()

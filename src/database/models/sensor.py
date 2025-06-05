@@ -103,8 +103,13 @@ class Sensor(Model):
     tipo_sensor: Mapped[TipoSensor] = relationship('TipoSensor', back_populates='sensors')
 
     nome: Mapped[str] = mapped_column(
-        String(255), nullable=False, unique=True, info={'label': 'Nome'},
+        String(255), nullable=True, unique=True, info={'label': 'Nome'},
         comment="Nome do sensor"
+    )
+
+    cod_serial: Mapped[str] = mapped_column(
+        String(255), nullable=True, unique=False, info={'label': 'Código Serial'},
+        comment="Código serial do sensor, usado para identificação única"
     )
 
     descricao: Mapped[str] = mapped_column(
