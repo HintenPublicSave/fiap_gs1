@@ -38,7 +38,8 @@ CREATE TABLE "POST_REDE_SOCIAL" (
 CREATE TABLE "SENSOR" (
 	id INTEGER NOT NULL, 
 	tipo_sensor_id INTEGER NOT NULL, 
-	nome VARCHAR(255) NOT NULL, 
+	nome VARCHAR(255), 
+	cod_serial VARCHAR(255), 
 	descricao VARCHAR(255), 
 	data_instalacao DATETIME, 
 	latitude FLOAT, 

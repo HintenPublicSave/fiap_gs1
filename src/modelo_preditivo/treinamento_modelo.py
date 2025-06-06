@@ -90,6 +90,7 @@ Aqui, o caminho do arquivo .csv contendo os dados agrícolas (com as colunas Dat
 
 #📂 Definição do caminho de acesso aos dados da lavoura
 
+# fonte dos dados: https://github.com/anagovbr/hidro-dados-estacoes-convencionais/tree/main/fluviometricas
 csv_path = "COTAxCHUVA.csv"
 
 """📥 Carregamento do dataset para estrutura tabular do pandas
@@ -686,12 +687,12 @@ for nome in top5_resultados['Modelo']:
 
     # Se y_test ou y_pred estiverem one-hot encoded, converta para labels originais
     if y_test.ndim > 1 and y_test.shape[1] > 1:
-        y_test_labels = ohe.inverse_transform(y_test).ravel()
+        y_test_labels = le.inverse_transform(y_test).ravel()
     else:
         y_test_labels = y_test
 
     if y_pred.ndim > 1 and y_pred.shape[1] > 1:
-        y_pred_labels = ohe.inverse_transform(y_pred).ravel()
+        y_pred_labels = le.inverse_transform(y_pred).ravel()
     else:
         y_pred_labels = y_pred
 

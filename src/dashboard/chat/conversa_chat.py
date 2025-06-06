@@ -16,7 +16,7 @@ def get_conversa():
     col1, col2 = st.columns((10, 4))
 
     with col1:
-        st.title("Assistente Virtual")
+        st.title("Assistente Virtual Neura5")
 
     with col2:
         options = [item for item in AvailableGenerativeModels]
