@@ -657,6 +657,72 @@ A seguir, a view onde o usuário pode realizar a previsão de enchentes, que uti
   <img src="assets/readme/dashboard/modelo_preditivo/previsao_de_enchentes_manual.JPG" alt="previsao_de_enchentes_manual" border="0" width=70% height=70%>
 </p>
 
+## Script para criação de sensores
+
+  # Criação de Tipos de Sensores
+    Define três categorias principais de sensores:
+
+    Sensor de Profundidade
+    Sensor de Bueiro
+    Sensor de Leito de Rio
+
+    Caso esses tipos ainda não existam no banco de dados, o script os insere.
+
+  # Criação de Sensores
+    Para cada tipo de sensor, são criados dois sensores com nomes e descrições predefinidos. Cada sensor inclui também:
+    Data de instalação (data e hora atuais)
+    Localização aleatória (latitude e longitude geradas aleatoriamente)
+    Geração de Leituras Aleatórias
+    Para cada sensor criado, o script gera 5 leituras com valores aleatórios dentro de um intervalo específico, dependendo do tipo de sensor:
+
+    Profundidade: 10.0 a 100.0
+    Bueiro: 0.0 a 1.0
+    Leito: 0.5 a 10.0
+
+  # Persistência no Banco de Dados
+    Todos os dados criados (tipos, sensores e leituras) são salvos na base de dados por meio de uma sessão com o SQLAlchemy.
+
+  # Logs de Saída
+    Ao final da execução, o script informa no console quais tipos e sensores foram criados. Se tudo já estiver previamente cadastrado, será exibida uma mensagem informando que nenhum novo dado foi inserido.
+
+## Funcionamento API "init_sensor"
+
+  # Funcionamento:
+    Recebe uma Requisição
+    A requisição deve conter um campo serial no corpo JSON, representando o número de série único do sensor.
+
+  # Verifica e Cria Tipos de Sensores
+    Para cada valor do TipoSensorEnum, o script verifica se já existe um tipo correspondente no banco de dados.
+    Se o tipo ainda não existir, ele é criado e persistido.
+
+  # Verifica Existência de Sensor
+    Antes de cadastrar um novo sensor, o script verifica se já existe um sensor com o mesmo número de série (serial) e o mesmo tipo.
+    Se já existir, o sensor não é recriado (evita duplicatas).
+
+  # Criação do Sensor
+    Caso o sensor ainda não exista, ele é criado com:
+      Nome no formato Sensor <tipo> - <serial>
+      Serial fornecido pela requisição
+      Tipo de sensor associado
+      Descrição padrão
+
+  # Resposta da API
+    Ao final do processo, retorna um JSON com status de sucesso e uma mensagem confirmando o cadastro.
+
+  # Exemplo requisição:
+    POST /
+    {
+      "serial": "ABC123"
+    }
+
+  # exemplo resposta:
+    {
+      "status": "success",
+      "message": "Sensor cadastrado com sucesso."
+    }
+
+
+
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
