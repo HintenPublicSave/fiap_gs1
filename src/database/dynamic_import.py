@@ -5,6 +5,10 @@ import os
 
 from src.database.tipos_base.model import Model
 
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+if src_path not in sys.path:
+    sys.path.append(src_path)
+
 
 def import_models(sort:bool=False) -> dict[str, type[Model]]:
     """
