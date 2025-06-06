@@ -316,6 +316,12 @@ O limite de requisições da API é de 60 requisições por minuto e 1500 requis
   <img src="assets/readme/dashboard/erro_503.JPG" alt="erro_503" border="0" width=70% height=70%>
 </p>
 
+## Possíveis alucinações que o agente pode ter
+
+O agente não é perfeito e pode apresentar alucinações, ou seja, gerar informações incorretas, irrelevantes ou até mesmo começar a responder em inglês.
+Isso pode ocorrer devido a limitações no modelo de IA ou na interpretação do prompt pelo agente.
+Caso isto ocorra, a melhor solução é clicar no botão "Novo Chat" e começar uma nova conversa.
+
 ## Visualizando e alterando imagens criadas
 
 As imagens criadas pelo agente de IA podem ser visualizadas e alteradas diretamente no dashboard. O usuário pode acessar a página de Arquvios, onde poderá ver todas as imagens criadas, editar ou excluir aquelas que não forem mais necessárias.
@@ -375,6 +381,56 @@ Posto isto, seguem abaixo algumas imagens que ilustram a página de posts, bem c
   <img src="assets/readme/dashboard/crud/posts_3.JPG" alt="posts_3" border="0" width=70% height=70%>
 </p>
 
+## Visualizando e alterando sensores e leituras
+
+Os sensores podem ser localizados no menu sob a sessão de sensores, nele o usuário poderá visualizar todos os sensores cadastrados, bem como as leituras realizadas por cada um deles.
+O usuario também poderá realizar operações CRUD na mesma maneira do anteriormente citado.
+
+<p align="center">
+  <img src="assets/readme/dashboard/sensores/menu_sensores.JPG" alt="menu_sensores" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/sensores/menu_sensores_2.JPG" alt="menu_sensores_2" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/sensores/menu_sensores_3.JPG" alt="menu_sensores_3" border="0" width=70% height=70%>
+</p>
+
+No caso das leituras, o usuário poderá visualizar um gráfico com as leituras realizadas por cada sensor, podendo visualizar um gráfico com dados reais ou simulados.
+
+<p align="center">
+  <img src="assets/readme/dashboard/sensores/menu_sensores_4.JPG" alt="menu_sensores_4" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/sensores/menu_sensores_5.JPG" alt="menu_sensores_5" border="0" width=70% height=70%>
+</p>
+<p align="center">
+  <img src="assets/readme/dashboard/sensores/menu_sensores_6.JPG" alt="menu_sensores_6" border="0" width=70% height=70%>
+</p>
+
+## Importar Tabelas com os dados
+
+As tabelas com os dados utilizados no sistema podem ser encontradas na pasta em `assets/database_export.zip`.
+
+O arquivo zip contém os arquivos no formato CSV, que podem ser importados para o banco de dados utilizando o dashboard, conforme passos abaixo.
+
+1. O usuário deve selecionar a opção "Importar Banco de Dados" no menu principal.
+<p align="center">
+  <img src="assets/readme/dashboard/importar_banco_de_dados/importar_bd_1.JPG" alt="importar_db" border="0" width=80% height=80%>
+</p>
+
+2. Selecione o arquivo ZIP localizado em `assets/database_export.zip`, espere carregar, role a página até o final e clique no botão "Salvar no Banco de Dados".
+<p align="center">
+  <img src="assets/readme/dashboard/importar_banco_de_dados/importar_bd_2.JPG" alt="salvar_db" border="0" width=80% height=80%>
+</p>
+
+3. Não feche a janela e espere a operação ser concluída. Após a conclusão, o sistema irá exibir uma mensagem de sucesso. Caso ocorra algum erro, tente novamente.
+
+<p align="center">
+  <img src="assets/readme/dashboard/importar_banco_de_dados/importar_bd_3.JPG" alt="salvar_db" border="0" width=80% height=80%>
+</p>
+
+
 ## Previsão do tempo
 
 O usuario também pode acessar a página de Previsão do Tempo, onde poderá visualizar as condições climáticas atuais e as previsões para os próximos dias.
@@ -428,6 +484,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🗃 Histórico de lançamentos
 
+* 0.3.0 - 05/06/2025  - Melhorias no readme, adição de imagens e explicações sobre os sensores e importação de banco de dados
 * 0.2.0 - 04/06/2025  - Versão preliminar da nossa aplicação, com dashboard e funcionalidades básicas implementadas
 * 0.1.0 - 23/05/2025  - Versão preliminar da nossa aplicação
 

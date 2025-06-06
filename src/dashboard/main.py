@@ -1,6 +1,7 @@
 import logging
 import os
 
+from src.dashboard.api_sensor import iniciar_api_sensor
 from src.dashboard.login import login_view, login_sqlite
 import streamlit as st
 from src.dashboard.navigator import navigation
@@ -30,6 +31,7 @@ def main():
     else:
         logging.debug('acessando dashboard')
         setup()
+        iniciar_api_sensor()
         navigation()
 
 if __name__ == "__main__":
