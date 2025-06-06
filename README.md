@@ -147,6 +147,7 @@ Dessa maneira, este detalhamento textual pode ser incorporado ao **README** de s
 Visando ampliar o impacto e a eficácia da solução desenvolvida, propomos a evolução do projeto para um aplicativo móvel robusto e proativo. O objetivo é ir além da comunicação reativa, oferecendo um sistema de monitoramento individualizado e preditivo, voltado à prevenção de desaparecimentos em cenários de desastre. A ideia é ir além da comunicação passiva e reativa, oferecendo uma camada adicional de proteção à vida humana por meio de análise preditiva, geolocalização e inteligência de rede.
 
 **🚀 Visão Geral**
+
 O aplicativo atua de forma proativa ao:
 
 - Monitorar a localização do usuário em tempo real;
@@ -155,6 +156,7 @@ O aplicativo atua de forma proativa ao:
 - Acionar automaticamente as autoridades se todos os critérios forem atendidos.
 
 **🔍 Funcionamento Técnico**
+
 O sistema baseia-se em três etapas principais de verificação simultânea:
 
 1. Monitoramento de Área de Risco
@@ -179,10 +181,13 @@ Parceria com operadoras nacionais para detectar:
 - Utilização de metadados e padrões da rede em conformidade com a LGPD.
 
 **⚠️ Acionamento Automático**
+
 Se as três condições forem verificadas simultaneamente, o sistema:
 
 ✅ Detecta o usuário em uma área de risco ativa
+
 ✅ Confirma a ocorrência de desastre na região
+
 ✅ Identifica uma perda de sinal anormal
 
 ➡️ Aciona automaticamente as autoridades competentes, enviando:
@@ -192,6 +197,7 @@ Se as três condições forem verificadas simultaneamente, o sistema:
 - Dados contextuais sobre o evento natural detectado.
 
 **💡 Impacto Esperado**
+
 Aumento da eficiência no resgate de desaparecidos;
 
 - Redução do tempo de resposta das autoridades;
@@ -208,6 +214,7 @@ Aumento da eficiência no resgate de desaparecidos;
 - Painel administrativo para acompanhamento por equipes de resgate.
 
 **🛡️ Conformidade e Privacidade**
+
 Todos os dados tratados seguem a Lei Geral de Proteção de Dados (LGPD).
 
 - Os dados de localização são coletados apenas com consentimento do usuário.
@@ -215,6 +222,7 @@ Todos os dados tratados seguem a Lei Geral de Proteção de Dados (LGPD).
 - Os metadados utilizados para análise de sinal são processados de forma anonimizada, focando exclusivamente em identificar situações de risco.
 
 **🤝 Integração com a Solução de IA**
+
 Este aplicativo compõe uma segunda camada tecnológica no ecossistema proposto pelo grupo:
 
 Enquanto o agente de IA se encarrega da comunicação massiva,
