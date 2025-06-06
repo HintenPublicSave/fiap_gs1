@@ -1,56 +1,36 @@
-import importlib
-import inspect
 import logging
-import os
-import sys
 
 from src.database.tipos_base.model import Model
 
-src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
-if src_path not in sys.path:
-    sys.path.append(src_path)
+# Importe manualmente as classes Model dos arquivos referenciados
+from src.database.models.files_database import Arquivo
+from src.database.models.posts import PostRedeSocial
+from src.database.models.sensor import TipoSensor, Sensor, LeituraSensor
 
-
-def import_models(sort:bool=False) -> dict[str, type[Model]]:
+def import_models(sort: bool = False) -> dict[str, type[Model]]:
     """
-    Importa dinamicamente todas as classes que herdam de Model
-    na pasta src/python/database/models.
+    Importa diretamente todas as classes que herdam de Model
+    nos arquivos referenciados.
     :return: dict - Um dicionário com o nome das classes como chave e as classes como valor.
     """
-    models = {}
-    models_path = os.path.join(os.path.dirname(__file__), "models")
-
-    for file in os.listdir(models_path):
-        if file.endswith(".py") and file != "__init__.py":
-
-            # Remove o caminho do arquivo e substitui por um ponto
-            # para formar o nome do módulo
-            # Exemplo: src/database/models/modelo.py -> src.database.models.modelo
-            # Isso é necessário para que o import funcione corretamente e o módulo seja encontrado.
-
-            src_path = list(models_path.split(os.sep))
-            src_path = src_path[src_path.index('src'):]
-            src_path = '.'.join(src_path)
-            module_name = f"{src_path}.{file[:-3]}"
-            # logging.debug(f"Importando módulo: {module_name}")
-
-            module = importlib.import_module(module_name)
-
-            for name, obj in inspect.getmembers(module, inspect.isclass):
-                if issubclass(obj, Model) and obj is not Model:
-                    # logging.debug(f"Encontrada classe modelo: {name}")
-                    models[name] = obj
+    models = {
+        'Arquivo': Arquivo,
+        'PostRedeSocial': PostRedeSocial,
+        'TipoSensor': TipoSensor,
+        'Sensor': Sensor,
+        'LeituraSensor': LeituraSensor,
+    }
 
     if sort:
-        models = dict(sorted(models.items(), key=lambda item: item[1].__database_import_order__))
+        models = dict(sorted(models.items(), key=lambda item: getattr(item[1], '__database_import_order__', 0)))
 
     return models
 
-def get_model_by_name(name:str) -> type[Model]:
+def get_model_by_name(name: str) -> type[Model]:
     """
-    Retorna uma instância do modelo baseado no nome.
+    Retorna a classe do modelo baseado no nome.
     :param name: Nome do modelo.
-    :return: Model - Instância do modelo.
+    :return: Model - Classe do modelo.
     """
     models = import_models()
     model_class = models.get(name)
@@ -59,15 +39,15 @@ def get_model_by_name(name:str) -> type[Model]:
     else:
         raise ValueError(f"Model '{name}' não encontrado.")
 
-def get_model_by_table_name(table_name:str) -> type[Model]:
+def get_model_by_table_name(table_name: str) -> type[Model]:
     """
-    Retorna uma instância do modelo baseado no nome da tabela.
+    Retorna a classe do modelo baseado no nome da tabela.
     :param table_name: Nome da tabela.
-    :return: Model - Instância do modelo.
+    :return: Model - Classe do modelo.
     """
     models = import_models()
     for model_class in models.values():
-        if model_class.__tablename__ == table_name:
+        if getattr(model_class, '__tablename__', None) == table_name:
             return model_class
     raise ValueError(f"Model com tabela '{table_name}' não encontrado.")
 
