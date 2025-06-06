@@ -116,12 +116,12 @@ def get_conversa():
 
     prompt = st.chat_input(
         "Digite sua mensagem aqui...",
-        accept_file=True,
-        file_type=["jpg", "jpeg", "png"],
+        accept_file=False,
+        # file_type=["jpg", "jpeg", "png"],
     )
 
-    if prompt is not None and prompt.text.strip() != "":
-        messages.chat_message("user").write(prompt.text)
+    if prompt is not None and prompt.strip() != "":
+        messages.chat_message("user").write(prompt)
         first = True
         tool_calls:list[tuple[BaseTool, dict]] = [] #tool + args
         tool_result:list[tuple[BaseTool, Any]] = []
@@ -143,7 +143,7 @@ def get_conversa():
 
             if first:
                 message_stream = generative_chat.send_message_stream(
-                    prompt.text.strip(),
+                    prompt.strip(),
                 )
             else:
                 message_stream = generative_chat.send_message_stream(
