@@ -1,36 +1,25 @@
-import importlib
-import inspect
-import os
-
 from src.large_language_model.tipos_base.base_tools import BaseTool
+
+# Importações diretas das ferramentas
+from src.large_language_model.tools.datetime_tool import DateTimeTool
+from src.large_language_model.tools.image_tool import ImageGenerationTool
+from src.large_language_model.tools.previsao_de_enchentes import EnchenteTool
+from src.large_language_model.tools.previsao_do_tempo_tool import PrevisaoDoTempoTool
+from src.large_language_model.tools.save_post_tool import SavePostTool
 
 def import_tools(sort: bool = False) -> dict[str, type[BaseTool]]:
     """
-    Importa dinamicamente todas as classes que herdam de BaseTool
-    na pasta src/python/large_language_model/tools.
+    Importa diretamente todas as classes que herdam de BaseTool
+    nos arquivos referenciados.
     :return: dict - Um dicionário com o nome das classes como chave e as classes como valor.
     """
-    tools = {}
-    tools_path = os.path.join(os.path.dirname(__file__), "tools")
-
-    for file in os.listdir(tools_path):
-        if file.endswith(".py") and file != "__init__.py":
-
-            # Remove o caminho do arquivo e substitui por um ponto
-            # para formar o nome do módulo
-            # Exemplo: src/large_language_model/tools/modelo.py -> src.large_language_model.tools.modelo
-            src_path = list(tools_path.split(os.sep))
-            src_path = src_path[src_path.index('src'):]
-            src_path = '.'.join(src_path)
-            module_name = f"{src_path}.{file[:-3]}"
-            # logging.debug(f"Importando módulo: {module_name}")
-
-            module = importlib.import_module(module_name)
-
-            for name, obj in inspect.getmembers(module, inspect.isclass):
-                if issubclass(obj, BaseTool) and obj is not BaseTool:
-                    # logging.debug(f"Encontrada classe ferramenta: {name}")
-                    tools[name] = obj
+    tools = {
+        'DateTimeTool': DateTimeTool,
+        'ImageGenerationTool': ImageGenerationTool,
+        'EnchenteTool': EnchenteTool,
+        'PrevisaoDoTempoTool': PrevisaoDoTempoTool,
+        'SavePostTool': SavePostTool,
+    }
 
     if sort:
         tools = dict(sorted(tools.items(), key=lambda item: item[0].lower()))
@@ -39,9 +28,9 @@ def import_tools(sort: bool = False) -> dict[str, type[BaseTool]]:
 
 def get_tool_by_name(name: str) -> type[BaseTool]:
     """
-    Retorna uma instância da ferramenta baseada no nome.
+    Retorna a classe da ferramenta baseada no nome.
     :param name: Nome da ferramenta.
-    :return: BaseTool - Instância da ferramenta.
+    :return: BaseTool - Classe da ferramenta.
     """
     tools = import_tools()
     tool_class = tools.get(name)
