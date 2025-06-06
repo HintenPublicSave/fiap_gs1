@@ -32,9 +32,13 @@ Como base de dados para o treinamento e validação do modelo de IA, utilizamos 
 
 ## 📜 Neura5: Agente de IA para Comunicação Emergencial em Desastres
 
-**Confira o vídeo de apresentação do projeto clicando no link(imagem) abaixo:**
+**Confira o vídeo de apresentação do projeto clicando no link ou imagem abaixo:**
 
 [![Neura5](assets/readme/logo.jpeg)](https://www.youtube.com/watch?v=STebZkIM680)
+
+[https://www.youtube.com/watch?v=STebZkIM680](https://www.youtube.com/watch?v=STebZkIM680)
+
+**Confira uma versão do projeto rodando no servidor do Streamlit!**
 
 ## Introdução
 
