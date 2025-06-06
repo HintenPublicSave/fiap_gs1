@@ -2,6 +2,7 @@ import importlib
 import inspect
 import logging
 import os
+import sys
 
 from src.database.tipos_base.model import Model
 
