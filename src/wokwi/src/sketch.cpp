@@ -21,10 +21,10 @@
 #define BUZZER_PIN   23  // Buzzer de alerta
 
 // === CONFIGURAÇÃO DE REDE E API ===
-const char* ssid = "Wokwi-GUEST";
-const char* password = "";
+const char* ssid = NETWORK_SSID;
+const char* password = NETWORK_PASSWORD;
 const int canal_wifi = 6; // Canal do WiFi (no uso real, deixar automático)
-const char* endpoint_api = "http://192.168.0.60:8180"; // URL da API
+const char* endpoint_api = API_URL; // URL da API
 const String init_sensor = String(endpoint_api) + "/init/";     // Endpoint de inicialização
 const String post_sensor = String(endpoint_api) + "/leitura/";  // Endpoint de envio de dados
 
@@ -40,7 +40,7 @@ void conectaWiFi() {
 }
 
 // === FUNÇÃO DE ENVIO DE DADOS PARA API ===
-void post_data(JsonDocument& doc, const String& endpoint_api) {
+int post_data(JsonDocument& doc, const String& endpoint_api) {
   Serial.println("Enviando dados para a API: " + endpoint_api);
 
   if (WiFi.status() == WL_CONNECTED) {
@@ -59,13 +59,18 @@ void post_data(JsonDocument& doc, const String& endpoint_api) {
       Serial.println("Erro na requisição");
     }
     http.end();
+    return httpCode;
   } else {
     Serial.println("WiFi desconectado, impossível fazer requisição!");
   }
+
+  return -1; // Retorna -1 se não conseguiu enviar os dados
+
 }
 
 // === IDENTIFICAÇÃO DO DISPOSITIVO ===
 char chipidStr[17];
+bool iniciou_sensor = false;
 
 void iniciar_sensor() {
   uint64_t chipid = ESP.getEfuseMac();
@@ -74,12 +79,15 @@ void iniciar_sensor() {
 
   JsonDocument doc;
   doc["serial"] = chipidStr; // Adiciona o Chip ID ao JSON
-  post_data(doc, init_sensor); // Envia o Chip ID para a API
-}
+  int httpcode = post_data(doc, init_sensor); // Envia o Chip ID para a API
 
-// === VARIÁVEIS DE ESTADO DOS BOTÕES ===
-bool estadoAPI = false;
-bool ultimoEstadoAPI = HIGH;
+  if (httpcode >= 200 && httpcode < 300) {
+    Serial.println("Sensor iniciado com sucesso!");
+    iniciou_sensor = true;
+  } else {
+    Serial.println("Falha ao iniciar o sensor na API.");
+  }
+}
 
 // === CONFIGURAÇÃO INICIAL ===
 void setup() {
@@ -102,7 +110,6 @@ void setup() {
   ledcAttachPin(BUZZER_PIN, 0);
 
   conectaWiFi();
-  iniciar_sensor();
 }
 
 // === FUNÇÃO DE LEITURA DO SENSOR ULTRASSÔNICO (HC-SR04) ===
@@ -116,22 +123,21 @@ float readDistanceCM() {
   return duration * 0.034 / 2;
 }
 
+
 // === LOOP PRINCIPAL ===
 void loop() {
   // Cria objeto JSON para envio dos dados
+
+  if (!iniciou_sensor) {
+    iniciar_sensor();
+  }
+
   JsonDocument doc;
   doc["serial"] = chipidStr;
 
   // Leitura do botão da API meteorológica
-  bool leituraAPI = digitalRead(BUTTON_API);
+  bool leituraAPIMetereologica = digitalRead(BUTTON_API);
   bool LedValue = digitalRead(LED_PIN);
-
-  // Controle de debounce do botão
-  if (leituraAPI == LOW && ultimoEstadoAPI == HIGH) {
-    estadoAPI = !estadoAPI; // Alterna o estado
-    delay(200); // Debounce
-  }
-  ultimoEstadoAPI = leituraAPI;
 
   // Leitura do LDR (nível simulado do bueiro)
   int ldrValue = analogRead(LDR_PIN); // 0 a 4095 no ESP32
@@ -150,7 +156,7 @@ void loop() {
   Serial.print("LDR (Nível Bueiro): "); Serial.print(ldrValue / 10.0); Serial.print("cm");
   Serial.print(" | Nível Leito: "); Serial.print(distance); Serial.print("cm");
   Serial.print(" | Relé (Envio de Dados): "); Serial.print(LedValue);
-  Serial.print(" | API: "); Serial.println(estadoAPI);
+  Serial.print(" | API: "); Serial.println(leituraAPIMetereologica);
 
   // Preenche o JSON para envio
   doc["bueiro"] = ldrValue / 10.0;
@@ -159,8 +165,8 @@ void loop() {
 
   serializeJsonPretty(doc, Serial);
 
-  // === AÇÃO: ATIVAR BOMBA E ALERTA ===
-  if (condicoesCriticas >= 1) {
+  // === AÇÃO: ATIVAR ALERTA ===
+  if (condicoesCriticas >= 1 or leituraAPIMetereologica == LOW) {
     Serial.println("ALERTA: Nível elevado de água detectado!");
     digitalWrite(RELAY_PIN, HIGH);  // Liga a bomba
     digitalWrite(LED_PIN, HIGH);    // Liga o LED
@@ -179,7 +185,11 @@ void loop() {
   }
 
   // Envia os dados para a API
-  post_data(doc, post_sensor);
+  if (iniciou_sensor){
+    digitalWrite(LED_PIN, HIGH);
+    post_data(doc, post_sensor);
+    digitalWrite(LED_PIN, LOW);
+  }
 
   delay(2000); // Aguarda 2 segundos para próxima leitura
 }

@@ -1,6 +1,6 @@
 from datetime import datetime
 from src.database.tipos_base.database import Database
-from src.models.sensor import TipoSensor, TipoSensorEnum, Sensor, LeituraSensor
+from src.database.models.sensor import TipoSensor, TipoSensorEnum, Sensor, LeituraSensor
 
 
 def criar_tipo_sensor(nome: str, tipo_enum: TipoSensorEnum) -> TipoSensor:
