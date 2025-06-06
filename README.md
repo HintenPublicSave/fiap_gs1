@@ -30,11 +30,9 @@ Para o desenvolvimento deste projeto, o grupo escolheu focar no desastre natural
 
 Como base de dados para o treinamento e validação do modelo de IA, utilizamos as informações disponibilizadas gratuitamente pelo site disasterscharter.org. Essa plataforma reúne dados reais de desastres globais, incluindo imagens de satélite, relatórios técnicos e registros oficiais monitorados por agências internacionais. O uso dessas informações garante que o modelo tenha acesso a dados confiáveis e atualizados para a construção de previsões mais precisas e eficazes.
 
-## 📜 Descrição
+## 📜 Neura5: Agente de IA para Comunicação Emergencial em Desastres
 
-## Projeto: Neura5: Agente de IA para Comunicação Emergencial em Desastres
-
-Confira o vídeo de apresentação do projeto clicando no link(imagem) abaixo:
+#Confira o vídeo de apresentação do projeto clicando no link(imagem) abaixo:
 
 [![Neura5](assets/readme/logo.jpeg)](https://www.youtube.com/watch?v=STebZkIM680)
 
